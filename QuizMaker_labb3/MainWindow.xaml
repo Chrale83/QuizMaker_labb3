@@ -21,6 +21,7 @@
 
         <!--<View:PlayerView  Grid.Row="1"/>-->
         <View:ConfigurationView  Grid.Row="1"/>
+        
 
 
     </Grid>

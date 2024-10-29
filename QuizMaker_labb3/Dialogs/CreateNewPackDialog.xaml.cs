@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuizMaker_labb3.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,7 @@ namespace QuizMaker_labb3.Dialogs
         public CreateNewPackDialog()
         {
             InitializeComponent();
+            //DataContext = 
         }
     }
 }

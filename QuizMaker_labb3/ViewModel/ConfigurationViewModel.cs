@@ -1,5 +1,6 @@
 ﻿using QuizMaker_labb3.Command;
 using QuizMaker_labb3.Model;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 
 namespace QuizMaker_labb3.ViewModel
@@ -20,11 +21,14 @@ namespace QuizMaker_labb3.ViewModel
         }
         public DelegateCommand AddQuestionCommand { get; }
         public DelegateCommand DeleteQuestionCommand { get; }
+        public DelegateCommand CreateNewPack { get; }
+        
         public ConfigurationViewModel(MainWindowViewModel? mainWindowViewModel)
         {
             this.mainWindowViewModel = mainWindowViewModel;
             AddQuestionCommand = new DelegateCommand(AddQuestion);
-            DeleteQuestionCommand = new DelegateCommand(DeleteQuestion);
+            DeleteQuestionCommand = new DelegateCommand(DeleteQuestion, CanDeleteQuestion);
+            CreateNewPack = new DelegateCommand(AddNewPack);
         }
 
         public QuestionPackViewModel? ActivePack { get => mainWindowViewModel.ActivePack; }
@@ -36,20 +40,30 @@ namespace QuizMaker_labb3.ViewModel
             var question = new Question("New Question", string.Empty, string.Empty, string.Empty, string.Empty);
             ActiveQuestion = question;
             mainWindowViewModel.ActivePack.Questions.Add(question);
-                
             }
+                
+            DeleteQuestionCommand.RaiseCanExectueChanged();
         }
 
         private void DeleteQuestion(object obj)
         {
-            if (ActivePack != null)
+            if (ActivePack != null && ActiveQuestion != null)
             {
                 ActivePack.Questions.Remove(ActiveQuestion);
+                DeleteQuestionCommand.RaiseCanExectueChanged();
             }
+        }
+        private bool CanDeleteQuestion(object? arg) //denna metod gör det möjligt att disabla knappen --> arg står för argument? (inparametern)
+        {
+            return ActivePack.Questions.Any();
+        }
+
+        private void AddNewPack(object? arg)
+        {
+            //var newPack = new QuestionPackViewModel();
         }
     }
 }
-
 //Här ska logiken bakom configView ligga
 
 //Man

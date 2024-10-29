@@ -5,8 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuizMaker_labb3.Dialogs"
         mc:Ignorable="d"
-        Title="CreateNewPackDialog" Height="450" Width="800">
+        Title="CreateNewPackDialog" Height="350" Width="180">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="60" />
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" 
+               Content="New Question Pack" 
+               HorizontalAlignment="Stretch" 
+               Background="#0f0f0f0f"/>
+
+        <StackPanel Grid.Row="1">
+            <Label Content="Pack Name" FontWeight="Bold" />
+            <TextBox Width="170" Margin="5,0"/>
+            
+
+            <Label Content="Difficulty" FontWeight="Bold" />
+            <ComboBox>
+                <ComboBoxItem />
+                <ComboBoxItem />
+                <ComboBoxItem />
+            </ComboBox>
+            
+            <Label Content="Time Limit" FontWeight="Bold" />
+            <Slider Width="170" Height="20" TickFrequency="1" Ticks="1"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2"  >
+            <Button  Content="Make Collection Pack" Height="40" Command="{Binding ConfigurationViewModel.AddNewPack}" />
+        </StackPanel>
     </Grid>
 </Window>
