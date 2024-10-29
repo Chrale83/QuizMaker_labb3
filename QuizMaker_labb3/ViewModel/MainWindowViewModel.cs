@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using QuizMaker_labb3.Command;
+using QuizMaker_labb3.Dialogs;
+using System.Collections.ObjectModel;
 
 namespace QuizMaker_labb3.ViewModel
 {
@@ -9,6 +11,7 @@ namespace QuizMaker_labb3.ViewModel
         public ConfigurationViewModel ConfigurationViewModel { get;}
 
         private QuestionPackViewModel? _activePack; //Valda paketet?
+		public DelegateCommand OpenNewPackDialog { get; }
 
 		public QuestionPackViewModel? ActivePack //Frågetecknet = visar för kompilatorn på att vi vet att den kan vara null
 		{
@@ -27,9 +30,16 @@ namespace QuizMaker_labb3.ViewModel
 			this.ActivePack = new QuestionPackViewModel(new Model.QuestionPack("My Question Pack")); //Denna ska inte ligga i konstruktorn, men kanske inte alls. (denna är hårdkodad)
             this.ConfigurationViewModel = new ConfigurationViewModel(this); // gör att dom har en referens tillbax
             this.PlayerViewModel = new PlayerViewModel(this); //Gör så dom har referenser till varandra
+			
+
+			OpenNewPackDialog = new DelegateCommand(NewPackDialog);
             
         }
-		
 
+		public void NewPackDialog(object? obj)
+		{
+			CreateNewPackDialog createNewPackDialog = new CreateNewPackDialog();
+			createNewPackDialog.ShowDialog();
+		}
     }
 }

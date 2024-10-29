@@ -12,7 +12,8 @@
             <MenuItem Header="_File" >
 
                 <MenuItem Header="_New Question Pack" 
-                          Icon="{fa:Icon File}"/>
+                          Icon="{fa:Icon File}"
+                          Command="{Binding OpenNewPackDialog}"/>
                 <MenuItem Header="_Select Question Pack"
                           Icon="{fa:Icon FolderOpen}">
                     <MenuItem Header="Placeholder" />

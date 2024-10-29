@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuizMaker_labb3.Dialogs"
         mc:Ignorable="d"
+        DataContext="{Binding Source=MainWindonViewModel}"
         Title="CreateNewPackDialog" Height="350" Width="180">
     <Grid>
         <Grid.RowDefinitions>
@@ -35,7 +36,7 @@
         </StackPanel>
 
         <StackPanel Grid.Row="2"  >
-            <Button  Content="Make Collection Pack" Height="40" Command="{Binding ConfigurationViewModel.AddNewPack}" />
+            <Button  Content="Make Collection Pack" Height="40" Command="{Binding AddQuestionCommand}" />
         </StackPanel>
     </Grid>
 </Window>
