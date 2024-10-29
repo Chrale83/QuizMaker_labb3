@@ -4,10 +4,110 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:QuizMaker_labb3.View"
-             DataContext="{Binding ConfigurationViewModel}"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp" 
+             xmlns:viewmodel="clr-namespace:QuizMaker_labb3.ViewModel" 
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="600" d:Background="White" MinHeight="450">
+
     <Grid>
-            <!--Här ska vara listbox och den skiten-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="300"/>
+            <ColumnDefinition MinWidth="300"/>
+        </Grid.ColumnDefinitions>
+
+        <!--Vänstra sidan-->
+        <DockPanel Grid.Column="0" Grid.Row="0" Margin="5,2,5,2">
+            <Label Content="Placeholder" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+
+            <Button Margin="1,2,2,2" 
+                    DockPanel.Dock="Right" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Right" 
+                    Width="21" Height="21"
+                    Command="{Binding ConfigurationViewModel.DeleteQuestionCommand}">
+                <StackPanel>
+                    <fa:IconImage Icon="Minus"/>
+                </StackPanel>
+            </Button>
+
+            <Button Margin="1,2,2,2" DockPanel.Dock="Right" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Right" 
+                    Width="21" Height="21" 
+                    Command="{Binding ConfigurationViewModel.AddQuestionCommand}">
+
+                <StackPanel>
+                    <fa:IconImage Icon="Plus"/>
+                </StackPanel>
+            </Button>
+
+            <Button Margin="1,2,2,2" DockPanel.Dock="Right"  HorizontalAlignment="Right" Width="21" Height="21" >
+                <StackPanel>
+                    <fa:IconImage Icon="Sliders"/>
+                </StackPanel>
+            </Button>
+        </DockPanel>
+
+        <ListView Margin="5,2,5,10" Grid.Row="1" Grid.Column="0"
+          ItemsSource="{Binding ConfigurationViewModel.ActivePack.Questions}" 
+                  SelectedItem="{Binding ConfigurationViewModel.ActiveQuestion, Mode=TwoWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="Question" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Query}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+
+
+        <!--Högra sidan-->
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" >
+                <Label  Margin="3" Content="Question:" HorizontalAlignment="Left"/>
+                <TextBox Margin="8,0,0,0" 
+                         HorizontalAlignment="Left" 
+                         Height="70" Width="250"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         Text="{Binding ConfigurationViewModel.ActiveQuestion.Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" >
+
+                <Label Margin="3" Content="Correct Answer:" HorizontalAlignment="Left"/>
+                <TextBox Margin="8,0,0,0" Height="20" Width="250" HorizontalAlignment="Left" Text="{Binding ConfigurationViewModel.ActiveQuestion.CorrectAnswer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Margin="3" Content="First Incorrect Answer:"/>
+                <TextBox Margin="8,0,0,0" Height="20" Width="250" HorizontalAlignment="Left" Text="{Binding ConfigurationViewModel.ActiveQuestion.InCorrectAnswers[0], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Margin="3" Content="Second incorrect Answer:"/>
+                <TextBox Margin="8,0,0,0" Height="20" Width="250" HorizontalAlignment="Left" Text="{Binding ConfigurationViewModel.ActiveQuestion.InCorrectAnswers[1], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Margin="3" Content="Third incorrect Answer:"/>
+                <TextBox Margin="8,0,0,0" Height="20" Width="250" HorizontalAlignment="Left" Text="{Binding ConfigurationViewModel.ActiveQuestion.InCorrectAnswers[2], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+        </Grid>
+
     </Grid>
 </UserControl>
+
+
+
+
+
+
+
+
+
+
+        

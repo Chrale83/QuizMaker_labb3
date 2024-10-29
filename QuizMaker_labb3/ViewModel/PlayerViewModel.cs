@@ -33,7 +33,7 @@ namespace QuizMaker_labb3.ViewModel
             TestData = "Start Value";
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1); //Varje sekund så skriver den ut ett x
-            timer.Tick += Timer_Tick;
+            
             //timer.Start();
 
             UpdateButtonCommand = new DelegateCommand(updateButton, CanUpdateButton);
@@ -50,9 +50,6 @@ namespace QuizMaker_labb3.ViewModel
             UpdateButtonCommand.RaiseCanExectueChanged(); //Denna gör så att den blir disablad när villkoret i "canUpdate" är uppfyllt
         }
 
-        private void Timer_Tick(object? sender, EventArgs e)
-        {
-            TestData += "x";
-        }
+        
     }
 }

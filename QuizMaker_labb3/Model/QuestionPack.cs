@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace QuizMaker_labb3.Model
 {
-    enum Difficulty
-    {
-        Easy, Medium, Hard
-    }
+
     internal class QuestionPack
     {
         public QuestionPack(string name, Difficulty difficulty = Difficulty.Medium, int timeLimitInSeconds = 30) //Default värden på de 2 sista argumenten
@@ -25,5 +22,9 @@ namespace QuizMaker_labb3.Model
         public int TimeLimitInSeconds { get; set; }
         public List<Question> Questions { get; set; }
 
+    }
+    enum Difficulty
+    {
+        Easy, Medium, Hard
     }
 }
