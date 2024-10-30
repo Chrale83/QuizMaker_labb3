@@ -24,6 +24,7 @@ namespace QuizMaker_labb3.Dialogs
         {
             InitializeComponent();
             DataContext = App.Current.MainWindow.DataContext;
+            
         }
     }
 }

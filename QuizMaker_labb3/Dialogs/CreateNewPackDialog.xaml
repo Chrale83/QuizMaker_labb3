@@ -7,6 +7,8 @@
         mc:Ignorable="d"
         
         Title="CreateNewPackDialog" Height="350" Width="200">
+    
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="32" />
@@ -21,16 +23,21 @@
 
         <StackPanel Grid.Row="1">
             <Label Content="Pack Name" FontWeight="Bold" />
-            <TextBox Width="170" Margin="5,0"/>
-            
+            <TextBox Width="170" Margin="5,0"
+                     Text="{Binding NewPackName, 
+                Mode=TwoWay, 
+                UpdateSourceTrigger=PropertyChanged}"/>
+
 
             <Label Content="Difficulty" FontWeight="Bold" />
-            <ComboBox Width="170">
-                <ComboBoxItem Content="1" />
-                <ComboBoxItem Content="2"/>
-                <ComboBoxItem Content="3" />
-            </ComboBox>
-            
+            <ComboBox 
+                ItemsSource="{Binding NewPackDifficulty}"
+                       
+                      Width="170" />
+
+
+
+
             <Label Content="Time Limit" FontWeight="Bold" />
             <Slider Width="170" Height="20" TickFrequency="1" Ticks="1"/>
         </StackPanel>

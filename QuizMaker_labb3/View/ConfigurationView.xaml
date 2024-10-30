@@ -7,7 +7,7 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp" 
              xmlns:viewmodel="clr-namespace:QuizMaker_labb3.ViewModel" 
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="600" d:Background="White" MinHeight="450" Height="450" Width="600">
+             d:DesignHeight="450" d:DesignWidth="600" d:Background="White" Height="450" Width="600">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -16,8 +16,8 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="300"/>
-            <ColumnDefinition MinWidth="300"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <!--Vänstra sidan-->
@@ -41,7 +41,6 @@
                     HorizontalAlignment="Right" 
                     Width="21" Height="21" 
                     Command="{Binding ConfigurationViewModel.AddQuestionCommand}">
-
                 <StackPanel>
                     <fa:IconImage Icon="Plus"/>
                 </StackPanel>
@@ -53,6 +52,7 @@
                 </StackPanel>
             </Button>
         </DockPanel>
+
 
         <ListView Margin="5,2,5,10" Grid.Row="1" Grid.Column="0"
           ItemsSource="{Binding ConfigurationViewModel.ActivePack.Questions}" 
@@ -83,19 +83,29 @@
                          Height="70" Width="250"
                          TextWrapping="Wrap"
                          AcceptsReturn="True"
-                         Text="{Binding ConfigurationViewModel.ActiveQuestion.Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{Binding ConfigurationViewModel.ActiveQuestion.Query, 
+                    Mode=TwoWay, 
+                    UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
 
             <StackPanel Grid.Row="1" >
 
                 <Label Margin="3" Content="Correct Answer:" HorizontalAlignment="Left"/>
-                <TextBox Margin="8,0,0,0" Height="20" Width="250" HorizontalAlignment="Left" Text="{Binding ConfigurationViewModel.ActiveQuestion.CorrectAnswer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Margin="8,0,0,0" Height="20" Width="250" HorizontalAlignment="Left" 
+                         Text="{Binding ConfigurationViewModel.ActiveQuestion.CorrectAnswer, Mode=TwoWay, 
+                    UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Margin="3" Content="First Incorrect Answer:"/>
-                <TextBox Margin="8,0,0,0" Height="20" Width="250" HorizontalAlignment="Left" Text="{Binding ConfigurationViewModel.ActiveQuestion.InCorrectAnswers[0], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Margin="8,0,0,0" Height="20" Width="250" HorizontalAlignment="Left" 
+                         Text="{Binding ConfigurationViewModel.ActiveQuestion.InCorrectAnswers[0], 
+                    Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Margin="3" Content="Second incorrect Answer:"/>
-                <TextBox Margin="8,0,0,0" Height="20" Width="250" HorizontalAlignment="Left" Text="{Binding ConfigurationViewModel.ActiveQuestion.InCorrectAnswers[1], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Margin="8,0,0,0" Height="20" Width="250" HorizontalAlignment="Left" 
+                         Text="{Binding ConfigurationViewModel.ActiveQuestion.InCorrectAnswers[1], 
+                    Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Margin="3" Content="Third incorrect Answer:"/>
-                <TextBox Margin="8,0,0,0" Height="20" Width="250" HorizontalAlignment="Left" Text="{Binding ConfigurationViewModel.ActiveQuestion.InCorrectAnswers[2], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Margin="8,0,0,0" Height="20" Width="250" HorizontalAlignment="Left" 
+                         Text="{Binding ConfigurationViewModel.ActiveQuestion.InCorrectAnswers[2], 
+                    Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
         </Grid>
 

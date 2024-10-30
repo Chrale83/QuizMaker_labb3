@@ -31,7 +31,7 @@ namespace QuizMaker_labb3.ViewModel
             //CreateNewPack = new DelegateCommand(AddNewPack);
         }
 
-        public QuestionPackViewModel? ActivePack { get => mainWindowViewModel.ActivePack; }
+        public QuestionPackViewModel? ActivePack { get => mainWindowViewModel?.ActivePack; }
         
         private void AddQuestion(object obj)
         {
@@ -39,7 +39,7 @@ namespace QuizMaker_labb3.ViewModel
             {
             var question = new Question("New Question", string.Empty, string.Empty, string.Empty, string.Empty);
             ActiveQuestion = question;
-            mainWindowViewModel.ActivePack.Questions.Add(question);
+            mainWindowViewModel?.ActivePack?.Questions.Add(question);
             }
                 
             DeleteQuestionCommand.RaiseCanExectueChanged();
