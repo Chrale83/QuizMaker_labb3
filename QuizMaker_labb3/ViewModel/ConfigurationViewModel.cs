@@ -21,14 +21,14 @@ namespace QuizMaker_labb3.ViewModel
         }
         public DelegateCommand AddQuestionCommand { get; }
         public DelegateCommand DeleteQuestionCommand { get; }
-        public DelegateCommand CreateNewPack { get; }
+        //public DelegateCommand CreateNewPack { get; }
         
         public ConfigurationViewModel(MainWindowViewModel? mainWindowViewModel)
         {
             this.mainWindowViewModel = mainWindowViewModel;
             AddQuestionCommand = new DelegateCommand(AddQuestion);
             DeleteQuestionCommand = new DelegateCommand(DeleteQuestion, CanDeleteQuestion);
-            CreateNewPack = new DelegateCommand(AddNewPack);
+            //CreateNewPack = new DelegateCommand(AddNewPack);
         }
 
         public QuestionPackViewModel? ActivePack { get => mainWindowViewModel.ActivePack; }
@@ -58,10 +58,11 @@ namespace QuizMaker_labb3.ViewModel
             return ActivePack.Questions.Any();
         }
 
-        private void AddNewPack(object? arg)
-        {
-            //var newPack = new QuestionPackViewModel();
-        }
+        //private void AddNewPack(object? arg)
+        //{
+        //    var newPack = new QuestionPackViewModel(new QuestionPack("hd"));
+            
+        //}
     }
 }
 //Här ska logiken bakom configView ligga

@@ -23,7 +23,7 @@ namespace QuizMaker_labb3.Dialogs
         public CreateNewPackDialog()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
+            DataContext = App.Current.MainWindow.DataContext;
         }
     }
 }

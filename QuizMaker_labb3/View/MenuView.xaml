@@ -13,7 +13,7 @@
 
                 <MenuItem Header="_New Question Pack" 
                           Icon="{fa:Icon File}"
-                          Command="{Binding OpenNewPackDialog}"/>
+                          Command="{Binding DialogsViewModel.OpenNewPackDialog}"/>
                 <MenuItem Header="_Select Question Pack"
                           Icon="{fa:Icon FolderOpen}">
                     <MenuItem Header="Placeholder" />

@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuizMaker_labb3.Dialogs"
         mc:Ignorable="d"
-        DataContext="{Binding Source=MainWindonViewModel}"
-        Title="CreateNewPackDialog" Height="350" Width="180">
+        
+        Title="CreateNewPackDialog" Height="350" Width="200">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="32" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="60" />
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" 
@@ -25,10 +25,10 @@
             
 
             <Label Content="Difficulty" FontWeight="Bold" />
-            <ComboBox>
-                <ComboBoxItem />
-                <ComboBoxItem />
-                <ComboBoxItem />
+            <ComboBox Width="170">
+                <ComboBoxItem Content="1" />
+                <ComboBoxItem Content="2"/>
+                <ComboBoxItem Content="3" />
             </ComboBox>
             
             <Label Content="Time Limit" FontWeight="Bold" />
@@ -36,7 +36,10 @@
         </StackPanel>
 
         <StackPanel Grid.Row="2"  >
-            <Button  Content="Make Collection Pack" Height="40" Command="{Binding AddQuestionCommand}" />
+            <Button  Margin="15"
+                     Content="Make Collection Pack" 
+                     Height="40" 
+                     Command="{Binding CreateNewPack}" />
         </StackPanel>
     </Grid>
 </Window>
