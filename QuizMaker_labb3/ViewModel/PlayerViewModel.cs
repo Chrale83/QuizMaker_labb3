@@ -8,7 +8,7 @@ using System.Windows.Threading;
 
 namespace QuizMaker_labb3.ViewModel
 {
-    internal class PlayerViewModel : ViewModelBase
+    public class PlayerViewModel : ViewModelBase
     {
         private readonly MainWindowViewModel? mainWindowViewModel;
 

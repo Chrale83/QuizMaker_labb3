@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QuizMaker_labb3.Model
 {
-    internal class Question
+    public class Question
     {
         public Question(string query, string correctAnswer,
             string inCorrectAnswer1, string inCorrectAnswer2, string inCorrectAnswer3)

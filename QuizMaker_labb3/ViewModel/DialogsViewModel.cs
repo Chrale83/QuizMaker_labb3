@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace QuizMaker_labb3.ViewModel
 {
-    internal class DialogsViewModel : ViewModelBase
+    public class DialogsViewModel : ViewModelBase
     {
         public DelegateCommand OpenNewPackDialog { get; }
         public DelegateCommand PackOptionsDialog { get; }

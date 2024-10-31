@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace QuizMaker_labb3.ViewModel
 {
-    internal class ConfigurationViewModel : ViewModelBase
+    public class ConfigurationViewModel : ViewModelBase
     {
         private readonly MainWindowViewModel? mainWindowViewModel;
 

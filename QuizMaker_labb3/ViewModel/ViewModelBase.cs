@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace QuizMaker_labb3.ViewModel
 {
-    internal class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

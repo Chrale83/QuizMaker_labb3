@@ -16,8 +16,8 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="270"/>
+            <ColumnDefinition Width="330"/>
         </Grid.ColumnDefinitions>
 
         <!--Vänstra sidan-->
@@ -54,7 +54,7 @@
         </DockPanel>
 
 
-        <ListView Margin="5,2,5,10" Grid.Row="1" Grid.Column="0"
+        <ListView Margin="5,2,5,10" Grid.Row="1" Grid.Column="0" 
           ItemsSource="{Binding ConfigurationViewModel.ActivePack.Questions}" 
                   SelectedItem="{Binding ConfigurationViewModel.ActiveQuestion, Mode=TwoWay}">
             <ListView.ItemTemplate>

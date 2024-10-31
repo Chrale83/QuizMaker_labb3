@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace QuizMaker_labb3.ViewModel
 {
-    internal class QuestionPackViewModel : ViewModelBase
+    public class QuestionPackViewModel : ViewModelBase
     {
         private readonly QuestionPack _model;
 

@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace QuizMaker_labb3.Command
 {
-    internal class DelegateCommand : ICommand
+    public class DelegateCommand : ICommand
     {
         private readonly Action<object> _execute;
         private readonly Func<object?, bool>? _canExectue;

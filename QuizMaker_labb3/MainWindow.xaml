@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuizMaker_labb3" xmlns:View="clr-namespace:QuizMaker_labb3.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="600">
     <Window.InputBindings>
         <KeyBinding Key="U" Modifiers="Ctrl" 
                     Command="{Binding PlayerViewModel.UpdateButtonCommand}" />
