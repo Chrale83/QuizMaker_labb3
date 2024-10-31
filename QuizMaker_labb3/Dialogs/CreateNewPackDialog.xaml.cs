@@ -1,17 +1,4 @@
-﻿using QuizMaker_labb3.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace QuizMaker_labb3.Dialogs
 {
@@ -26,5 +13,10 @@ namespace QuizMaker_labb3.Dialogs
             DataContext = App.Current.MainWindow.DataContext;
             
         }
+        public void CloseDialog()
+        {
+            this.Close();
+        }
     }
 }
+

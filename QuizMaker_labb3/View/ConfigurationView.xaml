@@ -46,7 +46,10 @@
                 </StackPanel>
             </Button>
 
-            <Button Margin="1,2,2,2" DockPanel.Dock="Right"  HorizontalAlignment="Right" Width="21" Height="21" >
+            <Button Margin="1,2,2,2" DockPanel.Dock="Right"  
+                    HorizontalAlignment="Right" 
+                    Width="21" Height="21" 
+                    Command="{Binding DialogsViewModel.OpenEditDialogWindow}">
                 <StackPanel>
                     <fa:IconImage Icon="Sliders"/>
                 </StackPanel>

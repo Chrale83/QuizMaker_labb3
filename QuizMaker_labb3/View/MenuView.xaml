@@ -14,12 +14,37 @@
                 <MenuItem Header="_New Question Pack" 
                           Icon="{fa:Icon File}"
                           Command="{Binding DialogsViewModel.OpenNewPackDialog}"/>
+
                 <MenuItem Header="_Select Question Pack"
                           Icon="{fa:Icon FolderOpen}">
-                    <MenuItem Header="Placeholder" />
+                    <MenuItem.ItemsSource>
+                        <Binding Path="Packs"/>
+                    </MenuItem.ItemsSource>
+
+                    <MenuItem.ItemTemplate>
+                        <DataTemplate>
+                            <MenuItem Header="{Binding Name}" 
+                                      Command="{Binding Path=DataContext.SelectPackCommand, RelativeSource={RelativeSource AncestorType=local:MenuView}}"
+                                      CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </MenuItem.ItemTemplate>
                 </MenuItem>
+
                 <MenuItem Header="Delete Question Pack" 
-                          Icon="{fa:Icon Trash}" />
+                          Icon="{fa:Icon Trash}">
+                    <MenuItem.ItemsSource>
+                        <Binding Path="Packs" />
+                    </MenuItem.ItemsSource>
+
+                    <MenuItem.ItemTemplate>
+                        <DataTemplate>
+                            <MenuItem Header="{Binding Name}" 
+                  Command="{Binding Path=DataContext.DeleteSelectedPackCommand, RelativeSource={RelativeSource AncestorType=local:MenuView}}"
+                  CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </MenuItem.ItemTemplate>
+
+                </MenuItem>
                 <Separator />
                 <MenuItem Header="Import Questions" 
                           Icon="{fa:Icon FileImport}" />
@@ -34,15 +59,16 @@
                           Command="{Binding ConfigurationViewModel.AddQuestionCommand}"/>
                 <MenuItem Header="_Remove QUestion" Icon="{fa:Icon Minus}"
                           Command="{Binding ConfigurationViewModel.DeleteQuestionCommand}"/>
+                
                 <MenuItem Header="_Pack options" 
                           InputGestureText="Ctrl+P"
-                          Command="{Binding PlayerViewModel.UpdateButtonCommand}" />
-
+                          Command="{Binding DialogsViewModel.OpenEditDialogWindow}" />
             </MenuItem>
             <MenuItem Header="Vi_ew" >
 
                 <MenuItem Header="Play" Icon="{fa:Icon Play}"/>
-                <MenuItem Header="Edit" Icon="{fa:Icon Sliders}"/>
+
+                <MenuItem Header="Edit" Icon="{fa:Icon Sliders}" />
                 <Separator/>
                 <MenuItem Header="Fullscreen" 
               InputGestureText="Ctrl+P"
@@ -53,4 +79,11 @@
         </Menu>
     </Grid>
 </UserControl>
+
+
+
+
+                
+                
+                
 <!--Icon="{fa:Icon FolderOpen}"/> fa är namespacet, Icon är propertien, FolderOpen är vilken-->

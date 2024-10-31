@@ -1,15 +1,19 @@
 ﻿using QuizMaker_labb3.Command;
 using QuizMaker_labb3.Model;
-using System.ComponentModel.DataAnnotations;
-using System.Windows.Input;
 
 namespace QuizMaker_labb3.ViewModel
 {
     public class ConfigurationViewModel : ViewModelBase
     {
-        private readonly MainWindowViewModel? mainWindowViewModel;
-
+        private readonly MainWindowViewModel? _mainWindowViewModel;
         private Question _activeQuestion;
+        public ConfigurationViewModel(MainWindowViewModel? mainWindowViewModel)
+        {
+            this._mainWindowViewModel = mainWindowViewModel;
+            AddQuestionCommand = new DelegateCommand(AddQuestion);
+            DeleteQuestionCommand = new DelegateCommand(DeleteQuestion, CanDeleteQuestion);
+        }
+
         public Question ActiveQuestion
         {
             get => _activeQuestion;
@@ -21,31 +25,23 @@ namespace QuizMaker_labb3.ViewModel
         }
         public DelegateCommand AddQuestionCommand { get; }
         public DelegateCommand DeleteQuestionCommand { get; }
-        //public DelegateCommand CreateNewPack { get; }
+        public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
         
-        public ConfigurationViewModel(MainWindowViewModel? mainWindowViewModel)
-        {
-            this.mainWindowViewModel = mainWindowViewModel;
-            AddQuestionCommand = new DelegateCommand(AddQuestion);
-            DeleteQuestionCommand = new DelegateCommand(DeleteQuestion, CanDeleteQuestion);
-            //CreateNewPack = new DelegateCommand(AddNewPack);
-        }
-
-        public QuestionPackViewModel? ActivePack { get => mainWindowViewModel?.ActivePack; }
         
-        private void AddQuestion(object obj)
+        private void AddQuestion(object? obj)
         {
             if (ActivePack != null)
             {
             var question = new Question("New Question", string.Empty, string.Empty, string.Empty, string.Empty);
             ActiveQuestion = question;
-            mainWindowViewModel?.ActivePack?.Questions.Add(question);
+            _mainWindowViewModel?.ActivePack?.Questions.Add(question);
             }
                 
             DeleteQuestionCommand.RaiseCanExectueChanged();
         }
 
-        private void DeleteQuestion(object obj)
+        
+        private void DeleteQuestion(object? obj)
         {
             if (ActivePack != null && ActiveQuestion != null)
             {
@@ -53,18 +49,12 @@ namespace QuizMaker_labb3.ViewModel
                 DeleteQuestionCommand.RaiseCanExectueChanged();
             }
         }
-        private bool CanDeleteQuestion(object? arg) //denna metod gör det möjligt att disabla knappen --> arg står för argument? (inparametern)
+        private bool CanDeleteQuestion(object? arg) 
         {
             return ActivePack.Questions.Any();
         }
-
-        //private void AddNewPack(object? arg)
-        //{
-        //    var newPack = new QuestionPackViewModel(new QuestionPack("hd"));
-            
-        //}
     }
-}
+}      
 //Här ska logiken bakom configView ligga
 
 //Man

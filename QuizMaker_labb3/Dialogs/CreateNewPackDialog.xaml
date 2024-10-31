@@ -8,66 +8,94 @@
         xmlns:local="clr-namespace:QuizMaker_labb3.Dialogs"
         mc:Ignorable="d"
         
-        Title="CreateNewPackDialog" Height="300" Width="200">
+        Title="CreateNewPackDialog" Height="260" Width="200">
     <Window.Resources>
         <ObjectDataProvider x:Key="DifficultyValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type Type="model:Difficulty"/>
             </ObjectDataProvider.MethodParameters>
-
-
         </ObjectDataProvider>
     </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="55" />
+            <RowDefinition Height="55" />
+            <RowDefinition Height="55" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" 
-               Content="New Question Pack" 
-               HorizontalAlignment="Stretch" 
-               Background="#0f0f0f0f"/>
-
+       Content="New Question Pack" 
+       HorizontalAlignment="Stretch" 
+       Background="#0f0f0f0f"/>
+        
         <StackPanel Grid.Row="1">
-            <Label Content="Pack Name" FontWeight="Bold" />
-            <TextBox Width="170" Margin="5,0"
-                     Text="{Binding NewPackName, 
-                Mode=TwoWay, 
-                UpdateSourceTrigger=PropertyChanged}"/>
-
-
-            <Label Content="Difficulty" FontWeight="Bold" />
-            <ComboBox Width="170"
-                ItemsSource="{Binding Source={StaticResource DifficultyValues}}"
-                SelectedItem="{Binding NewPackDifficulty, Mode=TwoWay}"/>
-
-            <Label Content="Time Limit" FontWeight="Bold" />
-            <Slider Width="170" Height="20" 
-                    TickFrequency="5" Ticks="120" TickPlacement="Both"
-                    Value="{Binding NewPackTimeInSecondsLeft, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Pack Name" FontWeight="Bold" Margin="10,2,2,0"/>
+            <TextBox Width="170"  Margin="0,2,2,0"
+             Text="{Binding NewPackName, 
+        Mode=TwoWay, 
+        UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="2">
+            <Label Content="Difficulty" FontWeight="Bold" Margin="10,-5,2,2"/>
+            <ComboBox Width="170"
+        ItemsSource="{Binding Source={StaticResource DifficultyValues}}"
+        SelectedItem="{Binding NewPackDifficulty, Mode=TwoWay}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                
+            <TextBlock Grid.Column="0"  Text="Time Limit:" FontWeight="Bold" Margin="14,2,2,2"/>
+                    <TextBlock Grid.Column="1" Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" Margin="10,2,2,2"/>
+                
+                </Grid>
+            <Slider Grid.Row="1" Name="slValue"
+            Width="170" Height="50" 
+            TickFrequency="5" TickPlacement="BottomRight" Maximum="120" Minimum="5" SelectionStart="30"
+            Value="{Binding NewPackTimeInSecondsLeft, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged}" IsSnapToTickEnabled="True"/>
+            </Grid>
+        </StackPanel>
+
+        <StackPanel Grid.Row="4">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Command="{Binding CreateNewPackCommand}" Margin="10,25,5,10" Grid.Column="0" HorizontalAlignment="Center"  Content="Create Pack" Width="70"/>
-                <Button Margin="5,25,10,10" Grid.Column="1" HorizontalAlignment="Center"  Content="Cancel" Width="70"/>
-
-
-
+                <Button Command="{Binding CreateNewPackCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:CreateNewPackDialog}}}"
+                        Margin="10,10,5,10" Grid.Column="0" HorizontalAlignment="Center"  Content="Create Pack" Width="70"/>
+                <Button Command="{Binding CloseWindowCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:CreateNewPackDialog}}}"
+                    Margin="5,10,10,10" Grid.Column="1" HorizontalAlignment="Center"  Content="Cancel" Width="70"/>
             </Grid>
         </StackPanel>
     </Grid>
 </Window>
+
+           
+
+
+
+
+
+
+
+
 
 
 

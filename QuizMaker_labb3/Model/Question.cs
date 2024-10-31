@@ -8,6 +8,7 @@ namespace QuizMaker_labb3.Model
 {
     public class Question
     {
+        private string _query;
         public Question(string query, string correctAnswer,
             string inCorrectAnswer1, string inCorrectAnswer2, string inCorrectAnswer3)
         {
@@ -15,11 +16,12 @@ namespace QuizMaker_labb3.Model
             CorrectAnswer = correctAnswer;
             InCorrectAnswers = new string[3] { inCorrectAnswer1, inCorrectAnswer2, inCorrectAnswer3 };
         }
-        private string _query;
         public string Query { get; set; }
         public string CorrectAnswer { get; set; }
         public string[] InCorrectAnswers { get; set; }
 
 
     }
+
+    
 }
