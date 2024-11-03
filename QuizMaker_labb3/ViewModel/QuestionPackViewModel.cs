@@ -19,7 +19,16 @@ namespace QuizMaker_labb3.ViewModel
             set
             {
                 _model.Difficulty = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(Difficulty));
+            }
+        }
+        public string Name
+        {
+            get => _model.Name;
+            set
+            {
+                _model.Name = value;
+                RaisePropertyChanged(nameof(Name));
             }
         }
         public int TimeLimitInSeconds
@@ -28,12 +37,17 @@ namespace QuizMaker_labb3.ViewModel
             set
             {
                 _model.TimeLimitInSeconds = value;
-                RaisePropertyChanged("TimeInSeconds");
+                RaisePropertyChanged(nameof(TimeLimitInSeconds));
             }
         }
     }
 }
+        
+
+
             
+
+
         
         
          

@@ -20,21 +20,19 @@ namespace QuizMaker_labb3.ViewModel
             }
         }
 
-        
-
         private ObservableCollection<QuestionPackViewModel> _packs;
         private ObservableCollection<QuestionPackViewModel> _newPack;
         private QuestionPackViewModel? _activePack;
         private double _newPackTimeInSecondsLeft;
         private string _newPackName;
-
         public MainWindowViewModel()
         {
             this.ConfigurationViewModel = new ConfigurationViewModel(this); // gör att dom har en referens tillbax
             this.PlayerViewModel = new PlayerViewModel(this); //ska stå this här Gör så dom har referenser till varandra
             this.DialogsViewModel = new DialogsViewModel();
             this.Packs = new ObservableCollection<QuestionPackViewModel>();
-            this.ActivePack = new QuestionPackViewModel(new Model.QuestionPack("My first question pack")); //Denna ska inte ligga i konstruktorn, men kanske inte alls. (denna är hårdkodad)
+            this.ActivePack = new QuestionPackViewModel(new QuestionPack("My first question pack")); //Denna ska inte ligga i konstruktorn, men kanske inte alls. (denna är hårdkodad)
+            
             SelectedViewModel = ConfigurationViewModel;
             Packs.Add(ActivePack);
             
@@ -45,40 +43,26 @@ namespace QuizMaker_labb3.ViewModel
             CreateNewPackCommand = new DelegateCommand(AddNewPack, CanAddNewPack);
             
         }
-
-            
-
-
         private void ChangeToPlayerView(object? view)
         {
-            
-            
             SelectedViewModel = PlayerViewModel;
             UpdateViewCommand.RaiseCanExectueChanged();
-            
         }
-
         private bool CanChangeToPlayerView(object? arg)
         {
             return ActivePack.Questions.Any();
         }
-
-
-
         public DelegateCommand CreateNewPackCommand { get; }
         public DelegateCommand CloseWindowCommand { get; }
         public DelegateCommand SelectPackCommand { get; }
         public DelegateCommand DeleteSelectedPackCommand { get; }
         public DelegateCommand UpdateViewCommand { get; }
-
-
-
-
-
+        
         public Difficulty NewPackDifficulty { get; set; }
         public PlayerViewModel PlayerViewModel { get; }
         public ConfigurationViewModel ConfigurationViewModel { get; }
         public DialogsViewModel DialogsViewModel { get; }
+        
         public double NewPackTimeInSecondsLeft
         {
             get => _newPackTimeInSecondsLeft;
@@ -92,8 +76,6 @@ namespace QuizMaker_labb3.ViewModel
                 ActivePack = selectedPack;
             }
         }
-        
-
         public string NewPackName { get => _newPackName;
             set 
             { 
@@ -127,14 +109,14 @@ namespace QuizMaker_labb3.ViewModel
             set
             {
                 _activePack = value;
-                RaisePropertyChanged("ActivePack");
-                
-                //ConfigurationViewModel.RaisePropertyChanged("ActivePack");
+                RaisePropertyChanged(nameof(ActivePack));
+                ConfigurationViewModel.RaisePropertyChanged("ActivePack");
             }
         }
+                
         private void AddNewPack(object? arg)
         {
-            var NewPack = new QuestionPackViewModel(new Model.QuestionPack(NewPackName, NewPackDifficulty, (int)NewPackTimeInSecondsLeft));
+            var NewPack = new QuestionPackViewModel(new QuestionPack(NewPackName, NewPackDifficulty, (int)NewPackTimeInSecondsLeft));
             Packs.Add(NewPack);
             ActivePack = NewPack;
             CleanUp();
@@ -175,6 +157,26 @@ namespace QuizMaker_labb3.ViewModel
             NewPackName = string.Empty;
         }
     }
-}
+}    
+
+
+
+            
+
+
+            
+        
+
+            
+
+
+
+
+        
+
+
+
+
+
                 
 

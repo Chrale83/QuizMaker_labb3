@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace QuizMaker_labb3.Model
 {
-
     public class QuestionPack
     {
         public QuestionPack(string name, Difficulty difficulty = Difficulty.Medium, int timeLimitInSeconds = 30) //Default värden på de 2 sista argumenten
@@ -28,3 +27,4 @@ namespace QuizMaker_labb3.Model
         Easy, Medium, Hard
     }
 }
+
