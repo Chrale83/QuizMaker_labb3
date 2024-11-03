@@ -14,7 +14,7 @@ namespace QuizMaker_labb3.ViewModel
 
         private DispatcherTimer timer;
         private string _testData;
-
+        public string PlayQuery { get; set; }   
         public string TestData
         {
             get => _testData;
@@ -46,6 +46,7 @@ namespace QuizMaker_labb3.ViewModel
 
         private void updateButton(object obj)
         {
+            
             TestData += "x";
             UpdateButtonCommand.RaiseCanExectueChanged(); //Denna gör så att den blir disablad när villkoret i "canUpdate" är uppfyllt
         }

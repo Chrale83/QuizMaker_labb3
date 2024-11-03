@@ -8,7 +8,8 @@ namespace QuizMaker_labb3.View
         public ConfigurationView()
         {
             InitializeComponent();
-            
+            DataContext = App.Current.MainWindow.DataContext;
+
         }
     }
 }

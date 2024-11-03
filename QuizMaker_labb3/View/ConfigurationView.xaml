@@ -47,6 +47,16 @@
             </Button>
 
             <Button Margin="1,2,2,2" DockPanel.Dock="Right"  
+        HorizontalAlignment="Right" 
+        Width="21" Height="21" 
+        Command="{Binding DataContext.UpdateViewCommand, 
+                RelativeSource={RelativeSource AncestorType=Window}}">
+                <StackPanel>
+                    <fa:IconImage Icon="Sliders"/>
+                </StackPanel>
+            </Button>
+
+            <Button Margin="1,2,2,2" DockPanel.Dock="Right"  
                     HorizontalAlignment="Right" 
                     Width="21" Height="21" 
                     Command="{Binding DialogsViewModel.OpenEditDialogWindow}">
@@ -55,7 +65,6 @@
                 </StackPanel>
             </Button>
         </DockPanel>
-
 
         <ListView Margin="5,2,5,10" Grid.Row="1" Grid.Column="0" 
           ItemsSource="{Binding ConfigurationViewModel.ActivePack.Questions}" 
@@ -69,8 +78,6 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
-
 
         <!--Högra sidan-->
         <Grid Grid.Row="1" Grid.Column="1">
@@ -114,6 +121,9 @@
 
     </Grid>
 </UserControl>
+
+
+
 
 
 

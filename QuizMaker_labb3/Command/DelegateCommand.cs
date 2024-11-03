@@ -1,9 +1,13 @@
-﻿using System.Windows.Input;
+﻿using QuizMaker_labb3.ViewModel;
+using System.Windows.Input;
 
 namespace QuizMaker_labb3.Command
 {
     public class DelegateCommand : ICommand
     {
+        
+
+
         private readonly Action<object> _exectue;
         private readonly Func<object?, bool>? _canExectue;
 

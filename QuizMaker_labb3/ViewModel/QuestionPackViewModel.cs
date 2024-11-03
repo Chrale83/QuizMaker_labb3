@@ -11,21 +11,8 @@ namespace QuizMaker_labb3.ViewModel
         {
             _model = model;
             Questions = new ObservableCollection<Question>(model.Questions);
-            
-        } 
-        
-        public ObservableCollection<Question> Questions { get; }
-        
-        public string Name 
-        {
-            get => _model.Name;
-            set
-            {
-                _model.Name = value;
-                RaisePropertyChanged();
-            }
         }
-
+        public ObservableCollection<Question> Questions { get; }
         public Difficulty Difficulty
         {
             get => _model.Difficulty;
@@ -46,3 +33,8 @@ namespace QuizMaker_labb3.ViewModel
         }
     }
 }
+            
+        
+        
+         
+

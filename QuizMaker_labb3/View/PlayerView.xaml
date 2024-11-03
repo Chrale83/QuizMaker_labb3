@@ -16,9 +16,12 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Margin="5" FontSize="30" HorizontalAlignment="Right" Text="57" />
-        <TextBlock Grid.Row="1" Margin="10" FontSize="40" HorizontalAlignment="Center" Text="What was? (Placeholder)"/>
+        <TextBlock Grid.Row="1" Margin="10" FontSize="40" HorizontalAlignment="Center" 
+                   Text="{Binding ConfigurationViewModel.ActiveQuestion.Query, 
+                    Mode=TwoWay, 
+                    UpdateSourceTrigger=PropertyChanged}"/>
         <TextBlock Grid.Row="2" Margin="5" FontSize="15" HorizontalAlignment="Center" Text="Question 2 of 7 (placeholder)"/>
-        
+
         <Grid Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -34,6 +37,6 @@
             <Button Grid.Column="1" Grid.Row="1" Content="Button 4" Margin="10,10,20,20" Width="250" Height="90" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
 
-        
+
     </Grid>
 </UserControl>

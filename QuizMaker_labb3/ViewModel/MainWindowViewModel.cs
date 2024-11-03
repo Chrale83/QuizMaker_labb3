@@ -2,12 +2,26 @@
 using QuizMaker_labb3.Dialogs;
 using QuizMaker_labb3.Model;
 using System.Collections.ObjectModel;
-using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace QuizMaker_labb3.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
+
+        private ViewModelBase _selectedViewModel;
+        public ViewModelBase SelectedViewModel
+        {
+            get { return _selectedViewModel; }
+            set
+            {
+                _selectedViewModel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        
+
         private ObservableCollection<QuestionPackViewModel> _packs;
         private ObservableCollection<QuestionPackViewModel> _newPack;
         private QuestionPackViewModel? _activePack;
@@ -17,15 +31,14 @@ namespace QuizMaker_labb3.ViewModel
         public MainWindowViewModel()
         {
             this.ConfigurationViewModel = new ConfigurationViewModel(this); // gör att dom har en referens tillbax
-            this.PlayerViewModel = new PlayerViewModel(this); //Gör så dom har referenser till varandra
+            this.PlayerViewModel = new PlayerViewModel(this); //ska stå this här Gör så dom har referenser till varandra
             this.DialogsViewModel = new DialogsViewModel();
-
             this.Packs = new ObservableCollection<QuestionPackViewModel>();
             this.ActivePack = new QuestionPackViewModel(new Model.QuestionPack("My first question pack")); //Denna ska inte ligga i konstruktorn, men kanske inte alls. (denna är hårdkodad)
-
+            SelectedViewModel = ConfigurationViewModel;
+            Packs.Add(ActivePack);
             
-            //Packs.Add(ActivePack);
-
+            UpdateViewCommand = new DelegateCommand(ChangeToPlayerView, CanChangeToPlayerView);
             DeleteSelectedPackCommand = new DelegateCommand(RemoveSelectedPack);
             SelectPackCommand = new DelegateCommand(SelectPack);
             CloseWindowCommand = new DelegateCommand(CloseDialogWindow);
@@ -33,17 +46,35 @@ namespace QuizMaker_labb3.ViewModel
             
         }
 
-        
+            
+
+
+        private void ChangeToPlayerView(object? view)
+        {
+            
+            
+            SelectedViewModel = PlayerViewModel;
+            UpdateViewCommand.RaiseCanExectueChanged();
+            
+        }
+
+        private bool CanChangeToPlayerView(object? arg)
+        {
+            return ActivePack.Questions.Any();
+        }
+
+
 
         public DelegateCommand CreateNewPackCommand { get; }
         public DelegateCommand CloseWindowCommand { get; }
         public DelegateCommand SelectPackCommand { get; }
         public DelegateCommand DeleteSelectedPackCommand { get; }
-        
-        
+        public DelegateCommand UpdateViewCommand { get; }
 
-            
-            
+
+
+
+
         public Difficulty NewPackDifficulty { get; set; }
         public PlayerViewModel PlayerViewModel { get; }
         public ConfigurationViewModel ConfigurationViewModel { get; }
@@ -90,18 +121,17 @@ namespace QuizMaker_labb3.ViewModel
                 RaisePropertyChanged("NewPack");
             }
         }
-        public QuestionPackViewModel? ActivePack 
+        public QuestionPackViewModel? ActivePack
         {
             get => _activePack;
             set
             {
                 _activePack = value;
-                RaisePropertyChanged("ActivePack"); //Ett exempel
-                //ConfigurationViewModel.RaisePropertyChanged("ActivePack"); <------- om nåt strular avkommentera denna
+                RaisePropertyChanged("ActivePack");
+                
+                //ConfigurationViewModel.RaisePropertyChanged("ActivePack");
             }
         }
-
-
         private void AddNewPack(object? arg)
         {
             var NewPack = new QuestionPackViewModel(new Model.QuestionPack(NewPackName, NewPackDifficulty, (int)NewPackTimeInSecondsLeft));
@@ -129,9 +159,6 @@ namespace QuizMaker_labb3.ViewModel
         {
             return !Packs.Any();
         }
-
-        
-            
         private void CloseDialogWindow(object? arg) // <------------- Fixa onödig If-sats? går att göra bättre (PRIO)
         {
             if (arg is CreateNewPackDialog dialogNew)
@@ -142,16 +169,12 @@ namespace QuizMaker_labb3.ViewModel
             {
                 dialogEdit.CloseDialog();
             }
-                
         }
-
         private void CleanUp()
         {
             NewPackName = string.Empty;
         }
     }
 }
-
-
-
+                
 

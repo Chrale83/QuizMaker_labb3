@@ -30,17 +30,14 @@ namespace QuizMaker_labb3.ViewModel
         
         private void AddQuestion(object? obj)
         {
-            if (ActivePack != null)
-            {
+            
             var question = new Question("New Question", string.Empty, string.Empty, string.Empty, string.Empty);
             ActiveQuestion = question;
             _mainWindowViewModel?.ActivePack?.Questions.Add(question);
-            }
-                
+
+            _mainWindowViewModel?.UpdateViewCommand.RaiseCanExectueChanged();
             DeleteQuestionCommand.RaiseCanExectueChanged();
         }
-
-        
         private void DeleteQuestion(object? obj)
         {
             if (ActivePack != null && ActiveQuestion != null)
@@ -55,6 +52,8 @@ namespace QuizMaker_labb3.ViewModel
         }
     }
 }      
+
+        
 //Här ska logiken bakom configView ligga
 
 //Man

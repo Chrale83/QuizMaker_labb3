@@ -24,7 +24,8 @@
                     <MenuItem.ItemTemplate>
                         <DataTemplate>
                             <MenuItem Header="{Binding Name}" 
-                                      Command="{Binding Path=DataContext.SelectPackCommand, RelativeSource={RelativeSource AncestorType=local:MenuView}}"
+                                      Command="{Binding Path=DataContext.SelectPackCommand, 
+                                RelativeSource={RelativeSource AncestorType=local:MenuView}}"
                                       CommandParameter="{Binding}" />
                         </DataTemplate>
                     </MenuItem.ItemTemplate>
@@ -39,7 +40,8 @@
                     <MenuItem.ItemTemplate>
                         <DataTemplate>
                             <MenuItem Header="{Binding Name}" 
-                  Command="{Binding Path=DataContext.DeleteSelectedPackCommand, RelativeSource={RelativeSource AncestorType=local:MenuView}}"
+                  Command="{Binding Path=DataContext.DeleteSelectedPackCommand, 
+                                RelativeSource={RelativeSource AncestorType=local:MenuView}}"
                   CommandParameter="{Binding}" />
                         </DataTemplate>
                     </MenuItem.ItemTemplate>
@@ -59,14 +61,16 @@
                           Command="{Binding ConfigurationViewModel.AddQuestionCommand}"/>
                 <MenuItem Header="_Remove QUestion" Icon="{fa:Icon Minus}"
                           Command="{Binding ConfigurationViewModel.DeleteQuestionCommand}"/>
-                
+
                 <MenuItem Header="_Pack options" 
                           InputGestureText="Ctrl+P"
                           Command="{Binding DialogsViewModel.OpenEditDialogWindow}" />
             </MenuItem>
             <MenuItem Header="Vi_ew" >
 
-                <MenuItem Header="Play" Icon="{fa:Icon Play}"/>
+                <MenuItem Header="Play" Icon="{fa:Icon Play}" 
+                          Command="{Binding DataContext.UpdateViewCommand, 
+                    RelativeSource={RelativeSource AncestorType=Window}}"/>
 
                 <MenuItem Header="Edit" Icon="{fa:Icon Sliders}" />
                 <Separator/>
@@ -83,7 +87,7 @@
 
 
 
-                
-                
-                
+
+
+
 <!--Icon="{fa:Icon FolderOpen}"/> fa är namespacet, Icon är propertien, FolderOpen är vilken-->
