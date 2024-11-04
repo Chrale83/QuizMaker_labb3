@@ -1,12 +1,5 @@
 ﻿using QuizMaker_labb3.Command;
 using QuizMaker_labb3.Dialogs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace QuizMaker_labb3.ViewModel
 {

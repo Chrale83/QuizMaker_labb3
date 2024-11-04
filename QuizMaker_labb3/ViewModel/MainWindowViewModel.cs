@@ -2,7 +2,6 @@
 using QuizMaker_labb3.Dialogs;
 using QuizMaker_labb3.Model;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 
 namespace QuizMaker_labb3.ViewModel
 {
@@ -17,8 +16,15 @@ namespace QuizMaker_labb3.ViewModel
             {
                 _selectedViewModel = value;
                 RaisePropertyChanged();
+                if (value == PlayerViewModel)
+                {
+                PlayerViewModel.StartQuiz(ActivePack);
+
+                }
+                
             }
         }
+
 
         private ObservableCollection<QuestionPackViewModel> _packs;
         private ObservableCollection<QuestionPackViewModel> _newPack;
@@ -62,6 +68,7 @@ namespace QuizMaker_labb3.ViewModel
         public PlayerViewModel PlayerViewModel { get; }
         public ConfigurationViewModel ConfigurationViewModel { get; }
         public DialogsViewModel DialogsViewModel { get; }
+        
         
         public double NewPackTimeInSecondsLeft
         {

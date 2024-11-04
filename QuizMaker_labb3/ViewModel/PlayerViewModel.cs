@@ -1,9 +1,6 @@
 ﻿using QuizMaker_labb3.Command;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using QuizMaker_labb3.Model;
+using System.DirectoryServices.ActiveDirectory;
 using System.Windows.Threading;
 
 namespace QuizMaker_labb3.ViewModel
@@ -13,15 +10,15 @@ namespace QuizMaker_labb3.ViewModel
         private readonly MainWindowViewModel? mainWindowViewModel;
 
         private DispatcherTimer timer;
-        private string _testData;
-        public string PlayQuery { get; set; }   
-        public string TestData
+        private QuestionPackViewModel _playingPack;
+        private Question _playingQuestion;
+        public Question PlayingQuestion
         {
-            get => _testData;
-            private set
+            get => _playingQuestion; 
+            set
             {
-                _testData = value;
-                RaisePropertyChanged();
+                _playingQuestion = value;
+                RaisePropertyChanged(nameof(PlayingQuestion));
             }
         }
 
@@ -30,27 +27,68 @@ namespace QuizMaker_labb3.ViewModel
         public PlayerViewModel(MainWindowViewModel? mainWindowViewModel)
         {
             this.mainWindowViewModel = mainWindowViewModel;
-            TestData = "Start Value";
+           
+            //timer = new DispatcherTimer();
+            //timer.Interval = TimeSpan.FromSeconds(1);
+        }
+
+        public void StartQuiz(QuestionPackViewModel activePack)
+        {
+            _playingPack = activePack;
+            ShufflePackOrder(_playingPack);
+            SetTimer(_playingPack);
+            
+        }
+
+        private void SetTimer(QuestionPackViewModel _playingPack)
+        {
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1); //Varje sekund så skriver den ut ett x
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer = _playingPack.TimeLimitInSeconds;
             
-            //timer.Start();
-
-            UpdateButtonCommand = new DelegateCommand(updateButton, CanUpdateButton);
         }
 
-        private bool CanUpdateButton(object? arg) //denna metod gör det möjligt att disabla knappen --> arg står för argument? (inparametern)
-        {
-            return TestData.Length < 20;
-        }
-
-        private void updateButton(object obj)
+        public void PlayQuiz(Question question)
         {
             
-            TestData += "x";
-            UpdateButtonCommand.RaiseCanExectueChanged(); //Denna gör så att den blir disablad när villkoret i "canUpdate" är uppfyllt
         }
 
-        
+        public QuestionPackViewModel ShufflePackOrder(QuestionPackViewModel playingPack)
+        {
+            ShuffleExtension.Shuffle(playingPack.Questions);
+            return playingPack;
+          
+        }
+
+
+
+
+
+
     }
+    
+    
+    
+    
+    public static class ShuffleExtension
+    {
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            Random rng = new Random();
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
+    }
+
+
+
+
+
 }
