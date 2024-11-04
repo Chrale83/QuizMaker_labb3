@@ -21,9 +21,9 @@ namespace QuizMaker_labb3.ViewModel
                 PlayerViewModel.StartQuiz(ActivePack);
 
                 }
-                
             }
         }
+                
 
 
         private ObservableCollection<QuestionPackViewModel> _packs;
@@ -164,26 +164,4 @@ namespace QuizMaker_labb3.ViewModel
             NewPackName = string.Empty;
         }
     }
-}    
-
-
-
-            
-
-
-            
-        
-
-            
-
-
-
-
-        
-
-
-
-
-
-                
-
+}

@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Margin="5" FontSize="30" HorizontalAlignment="Right" 
-                   Text="{Binding PlayerViewModel.timer}" />
+                   Text="{Binding PlayerViewModel.TimeLeftText}" />
         
         <TextBlock Grid.Row="1" Margin="10" FontSize="40" HorizontalAlignment="Center" 
                    Text="{Binding PlayerViewModel.PlayingQuestion.Query, 
@@ -33,6 +33,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            
             <Button Grid.Column="0" Grid.Row="0" 
                     Margin="20,20,10,10" Width="250" Height="90" 
                     HorizontalAlignment="Center" VerticalAlignment="Center"

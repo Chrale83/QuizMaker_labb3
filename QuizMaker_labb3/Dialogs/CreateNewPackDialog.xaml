@@ -35,15 +35,15 @@
             <Label Content="Pack Name" FontWeight="Bold" Margin="10,2,2,0"/>
             <TextBox Width="170"  Margin="0,2,2,0"
              Text="{Binding NewPackName, 
-        Mode=TwoWay, 
-        UpdateSourceTrigger=PropertyChanged}"/>
+                    Mode=TwoWay, 
+                    UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="2">
             <Label Content="Difficulty" FontWeight="Bold" Margin="10,-5,2,2"/>
             <ComboBox Width="170"
-        ItemsSource="{Binding Source={StaticResource DifficultyValues}}"
-        SelectedItem="{Binding NewPackDifficulty, Mode=TwoWay}"/>
+                      ItemsSource="{Binding Source={StaticResource DifficultyValues}}"
+                      SelectedItem="{Binding NewPackDifficulty, Mode=TwoWay}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="3">
@@ -53,12 +53,12 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
+
                 
             <TextBlock Grid.Column="0"  Text="Time Limit:" FontWeight="Bold" Margin="14,2,2,2"/>
                     <TextBlock Grid.Column="1" Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" Margin="10,2,2,2"/>

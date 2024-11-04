@@ -1,24 +1,40 @@
 ﻿using QuizMaker_labb3.Command;
 using QuizMaker_labb3.Model;
 using System.DirectoryServices.ActiveDirectory;
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace QuizMaker_labb3.ViewModel
 {
     public class PlayerViewModel : ViewModelBase
     {
         private readonly MainWindowViewModel? mainWindowViewModel;
-
-        private DispatcherTimer timer;
+        DispatcherTimer dispatcherTimer;
+        public TimeSpan _timeLeft;
         private QuestionPackViewModel _playingPack;
         private Question _playingQuestion;
+        private string _timeLeftTxt;
+        private int _counterQuestionIndex = 0;
+
+
         public Question PlayingQuestion
         {
-            get => _playingQuestion; 
+            get => _playingQuestion;
             set
             {
                 _playingQuestion = value;
                 RaisePropertyChanged(nameof(PlayingQuestion));
+            }
+        }
+
+        public string TimeLeftText { get => _timeLeftTxt;
+
+            set
+            {
+                _timeLeftTxt = value;
+                RaisePropertyChanged(nameof(TimeLeftText));
             }
         }
 
@@ -27,30 +43,46 @@ namespace QuizMaker_labb3.ViewModel
         public PlayerViewModel(MainWindowViewModel? mainWindowViewModel)
         {
             this.mainWindowViewModel = mainWindowViewModel;
-           
-            //timer = new DispatcherTimer();
-            //timer.Interval = TimeSpan.FromSeconds(1);
+
+            
         }
+
+       
 
         public void StartQuiz(QuestionPackViewModel activePack)
         {
             _playingPack = activePack;
             ShufflePackOrder(_playingPack);
             SetTimer(_playingPack);
-            
-        }
-
-        private void SetTimer(QuestionPackViewModel _playingPack)
-        {
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer = _playingPack.TimeLimitInSeconds;
+            PlayQuiz(_playingPack.Questions[_counterQuestionIndex]);
             
         }
 
         public void PlayQuiz(Question question)
         {
+            PlayingQuestion = question;
+        }
+
+        private void SetTimer(QuestionPackViewModel _playingPack)
+        {
+            int tempTimeInSec = _playingPack.TimeLimitInSeconds;
+            _timeLeft = TimeSpan.FromSeconds(tempTimeInSec);
+            dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
+            dispatcherTimer.Tick += DispatcherTimer_Tick;
+            dispatcherTimer.Start();
+        }
+
+        private void DispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            if (_timeLeft == TimeSpan.Zero) dispatcherTimer.Stop();
             
+            else
+            {
+                _timeLeft = _timeLeft.Add(TimeSpan.FromSeconds(-1));
+                TimeLeftText = _timeLeft.ToString("c");
+                
+            }
         }
 
         public QuestionPackViewModel ShufflePackOrder(QuestionPackViewModel playingPack)
@@ -59,17 +91,17 @@ namespace QuizMaker_labb3.ViewModel
             return playingPack;
           
         }
-
-
-
-
-
-
     }
+
+
     
-    
-    
-    
+
+
+
+
+
+
+
     public static class ShuffleExtension
     {
         public static void Shuffle<T>(this IList<T> list)
@@ -86,9 +118,4 @@ namespace QuizMaker_labb3.ViewModel
             }
         }
     }
-
-
-
-
-
 }
