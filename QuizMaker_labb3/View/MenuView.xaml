@@ -77,7 +77,7 @@
                 <MenuItem Header="Fullscreen" 
               InputGestureText="Ctrl+P"
                           Icon="{fa:Icon Expand}"
-              Command="{Binding PlayerViewModel.UpdateButtonCommand}" />
+              Command="{Binding PlayerViewModel.SetFullScreen}" />
 
             </MenuItem>
         </Menu>

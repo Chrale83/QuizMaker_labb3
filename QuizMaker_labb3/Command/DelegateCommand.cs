@@ -5,9 +5,6 @@ namespace QuizMaker_labb3.Command
 {
     public class DelegateCommand : ICommand
     {
-        
-
-
         private readonly Action<object> _exectue;
         private readonly Func<object?, bool>? _canExectue;
 
@@ -30,8 +27,8 @@ namespace QuizMaker_labb3.Command
         public void Execute(object? parameter) //Den koden som körs när man trycker på knappen, men bara om CanExecute() är true 
         {
             _exectue(parameter);
-        }
-
+        }     
+ 
         //public bool CanExecute(object? parameter) => canExectue is null ? true : canExectue(parameter);
 
         //public void Execute(object? parameter) => exectue(parameter);

@@ -42,13 +42,3 @@ namespace QuizMaker_labb3.ViewModel
         }
     }
 }
-        
-
-
-            
-
-
-        
-        
-         
-

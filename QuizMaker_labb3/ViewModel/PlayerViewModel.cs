@@ -1,25 +1,118 @@
 ﻿using QuizMaker_labb3.Command;
 using QuizMaker_labb3.Model;
-using System.DirectoryServices.ActiveDirectory;
-using System.Windows.Media.Animation;
+using System.Collections.ObjectModel;
+using System.Windows.Controls.Primitives;
 using System.Windows.Threading;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace QuizMaker_labb3.ViewModel
 {
     public class PlayerViewModel : ViewModelBase
     {
+        //<-----------------Föra att byta tillbaka---------------------->
+        //mainWindowViewModel.SelectedViewModel = mainWindowViewModel.ConfigurationViewModel; 
+
+
         private readonly MainWindowViewModel? mainWindowViewModel;
-        DispatcherTimer dispatcherTimer;
-        public TimeSpan _timeLeft;
+        private DispatcherTimer dispatcherTimer;
+        private TimeSpan _timeLeft;
         private QuestionPackViewModel _playingPack;
-        private Question _playingQuestion;
-        private string _timeLeftTxt;
-        private int _counterQuestionIndex = 0;
+        private ObservableCollection<string> _playingQuestion = new();
+        private List<Question> _activePlayingPack;
+        private int _currentQuestionIndex;
+        private int _timerForQuestionPack;
+        private int _currentQuestionView;
+        private int _maxQuestions;
+        private string _currentQuery;
+        private string _answerOption1;
+        private string _answerOption2;
+        private string _answerOption3;
+        private string _answerOption4;
+        private string _currentCorrectAnswer;
+        public PlayerViewModel(MainWindowViewModel? mainWindowViewModel)
+        {
+            this.mainWindowViewModel = mainWindowViewModel;
+            CheckAnswerCommand = new DelegateCommand(AnswerButton);
+        }
 
+        private void AnswerButton(object? answer)
+        {
+            dispatcherTimer.Stop();
+            
+            
+            if (answer == _currentCorrectAnswer)
+            {
+                //RÄTT SVAR
+            }
+            else
+            {
+                //FEL SVAR
+            }
+            
+            CurrentQuestionView++;
+            _currentQuestionIndex++;
+            if (_currentQuestionIndex < _maxQuestions)
+            {
+                PlayQuiz(_activePlayingPack[_currentQuestionIndex]);
+            }
+        }
 
-        public Question PlayingQuestion
+        public DelegateCommand CheckAnswerCommand { get; }
+
+        public int CurrentQuestionView
+        {
+            get => _currentQuestionView;
+            set
+            {
+                _currentQuestionView = value;
+                RaisePropertyChanged(nameof(CurrentQuestionView));
+            }
+        }
+        public int MaxQuestions
+        {
+            get => _maxQuestions;
+            set
+            {
+                _maxQuestions = value;
+                RaisePropertyChanged(nameof(MaxQuestions));
+            }
+        }
+        public string AnswerOption1
+        {
+            get => _answerOption1;
+            set
+            {
+                _answerOption1 = value;
+                RaisePropertyChanged(nameof(AnswerOption1));
+            }
+        }
+        public string AnswerOption2
+        {
+            get => _answerOption2;
+            set
+            {
+                _answerOption2 = value;
+                RaisePropertyChanged(nameof(AnswerOption2));
+            }
+        }
+        public string AnswerOption3
+        {
+            get => _answerOption3;
+            set
+            {
+                _answerOption3 = value;
+                RaisePropertyChanged(nameof(AnswerOption3));
+            }
+        }
+        public string AnswerOption4
+        {
+            get => _answerOption4;
+            set
+            {
+                _answerOption4 = value;
+                RaisePropertyChanged(nameof(AnswerOption4));
+            }
+        }
+        public ObservableCollection<string> PlayingQuestion
         {
             get => _playingQuestion;
             set
@@ -28,50 +121,83 @@ namespace QuizMaker_labb3.ViewModel
                 RaisePropertyChanged(nameof(PlayingQuestion));
             }
         }
-
-        public string TimeLeftText { get => _timeLeftTxt;
+        public int TimerForQuestionPack { get => _timerForQuestionPack;
 
             set
             {
-                _timeLeftTxt = value;
-                RaisePropertyChanged(nameof(TimeLeftText));
+                _timerForQuestionPack = value;
+                RaisePropertyChanged(nameof(TimerForQuestionPack));
+            }
+        }
+        public string CurrentQuery { get => _currentQuery; 
+            set
+            {
+                _currentQuery = value;
+                RaisePropertyChanged(nameof(CurrentQuery));
             }
         }
 
-        public DelegateCommand UpdateButtonCommand { get; }
-
-        public PlayerViewModel(MainWindowViewModel? mainWindowViewModel)
-        {
-            this.mainWindowViewModel = mainWindowViewModel;
-
-            
-        }
-
-       
-
         public void StartQuiz(QuestionPackViewModel activePack)
         {
-            _playingPack = activePack;
-            ShufflePackOrder(_playingPack);
-            SetTimer(_playingPack);
-            PlayQuiz(_playingPack.Questions[_counterQuestionIndex]);
             
+            SetupGame(activePack);
+            Shuffle(_activePlayingPack);
+            SetTimer(TimerForQuestionPack);
+
+            PlayQuiz(_activePlayingPack[_currentQuestionIndex]);
+
+
+        }
+        public void PlayQuiz(Question playingQuestion)
+        {
+            _currentCorrectAnswer = playingQuestion.CorrectAnswer;
+            CurrentQuery = playingQuestion.Query;
+            SetupPlayingQuestions(playingQuestion);
+            Shuffle(PlayingQuestion);
+            SetButtons();
+            
+            
+            _currentQuestionIndex++;
         }
 
-        public void PlayQuiz(Question question)
+        
+
+        public void SetButtons()
         {
-            PlayingQuestion = question;
+            AnswerOption1 = PlayingQuestion[0];
+            AnswerOption2 = PlayingQuestion[1];
+            AnswerOption3 = PlayingQuestion[2];
+            AnswerOption4 = PlayingQuestion[3];
         }
 
-        private void SetTimer(QuestionPackViewModel _playingPack)
+        private void SetupGame(QuestionPackViewModel activePack)
         {
-            int tempTimeInSec = _playingPack.TimeLimitInSeconds;
-            _timeLeft = TimeSpan.FromSeconds(tempTimeInSec);
+            _activePlayingPack = new List<Question>(activePack.Questions);
+            
+            TimerForQuestionPack = activePack.TimeLimitInSeconds;
+            MaxQuestions = _activePlayingPack.Count();
+            CurrentQuestionView = 1;
+            _currentQuestionIndex = 0;
+        }
+
+        private void SetupPlayingQuestions(Question playingQuestion)
+        {
+            PlayingQuestion.Clear();
+            PlayingQuestion.Add(playingQuestion.CorrectAnswer.ToString());
+            PlayingQuestion.Add(playingQuestion.InCorrectAnswers[0].ToString());
+            PlayingQuestion.Add(playingQuestion.InCorrectAnswers[1].ToString());
+            PlayingQuestion.Add(playingQuestion.InCorrectAnswers[2].ToString());
+        }
+        private void SetTimer(int TimerForQuestionPack)
+        {
+            
+            _timeLeft = TimeSpan.FromSeconds(TimerForQuestionPack);
             dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
             dispatcherTimer.Tick += DispatcherTimer_Tick;
             dispatcherTimer.Start();
         }
+            
 
         private void DispatcherTimer_Tick(object sender, EventArgs e)
         {
@@ -80,31 +206,10 @@ namespace QuizMaker_labb3.ViewModel
             else
             {
                 _timeLeft = _timeLeft.Add(TimeSpan.FromSeconds(-1));
-                TimeLeftText = _timeLeft.ToString("c");
-                
+                TimerForQuestionPack = (int)_timeLeft.TotalSeconds;
             }
         }
-
-        public QuestionPackViewModel ShufflePackOrder(QuestionPackViewModel playingPack)
-        {
-            ShuffleExtension.Shuffle(playingPack.Questions);
-            return playingPack;
-          
-        }
-    }
-
-
-    
-
-
-
-
-
-
-
-    public static class ShuffleExtension
-    {
-        public static void Shuffle<T>(this IList<T> list)
+        private void Shuffle<T>(IList<T> list)
         {
             Random rng = new Random();
             int n = list.Count;
@@ -118,4 +223,5 @@ namespace QuizMaker_labb3.ViewModel
             }
         }
     }
+ 
 }
