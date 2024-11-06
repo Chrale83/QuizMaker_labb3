@@ -8,7 +8,7 @@
         xmlns:View="clr-namespace:QuizMaker_labb3.View" 
         xmlns:QuizMaker_labb3.MainWindow.Converter="clr-namespace:QuizMaker_labb3.Converter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="600">
+        Title="Labb3" Height="450" Width="600" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <DataTemplate DataType="{x:Type ViewModel:ConfigurationViewModel}">
             <View:ConfigurationView />
@@ -30,6 +30,11 @@
         <ContentControl Grid.Row="1" Content="{Binding SelectedViewModel}" />
     </Grid>
 </Window>
+    
+    <!--Kvar att göra: -Fixa FullScreen
+                   -Snabb genvägar
+                   -Json filen
+                   -Lägga in en bild på Zorro-->
         
 
         

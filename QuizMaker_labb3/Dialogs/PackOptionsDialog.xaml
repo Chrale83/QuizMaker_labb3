@@ -7,7 +7,7 @@
         xmlns:model="clr-namespace:QuizMaker_labb3.Model"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="PackOptionsDialog" Height="450" Width="800">
+        Title="Edit QuestionPack settings" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ObjectDataProvider x:Key="DifficultyValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>

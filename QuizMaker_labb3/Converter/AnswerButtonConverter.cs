@@ -15,10 +15,10 @@ namespace QuizMaker_labb3.Converter
             
             if (values != null && values.Length == 2)
             {
-                string answer = values[0]?.ToString();  
-                string buttonNr = values[1]?.ToString();  
+                string answer = values[0]?.ToString();
+                string buttonNr = values[1]?.ToString();
                 string[] tempBox = { answer, buttonNr };
-                
+
                 return tempBox;
             }
 

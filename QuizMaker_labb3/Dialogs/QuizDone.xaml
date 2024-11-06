@@ -6,13 +6,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuizMaker_labb3.Dialogs"
         mc:Ignorable="d"
-        Title="QuizDone" Height="450" Width="800">
+        Title="Results" Height="300" Width="300"
+        Background="AliceBlue" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="Du hade "/>
-            <TextBlock Text="Du hade "/>
-            <TextBlock Text="av"/>
-            <TextBlock Text="{Binding PlayerViewModel._maxQuestions}"/>
+            <TextBlock Text="{Binding PlayerViewModel.CorrectAnswerCounter}"/>
+            <TextBlock Text=" rätt av "/>
+            <TextBlock Text="{Binding PlayerViewModel.MaxQuestions}"/>
+            <TextBlock Text=" frågor"/>
         </StackPanel>
     </Grid>
 </Window>

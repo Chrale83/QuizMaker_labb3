@@ -1,4 +1,5 @@
 ﻿using QuizMaker_labb3.Extension;
+using QuizMaker_labb3.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,9 +10,15 @@ using System.Windows.Media;
 
 namespace QuizMaker_labb3.Extension
 {
-    public class AnswerButton : INotifyPropertyChanged
+    public class AnswerOption : ViewModelBase
     {
-        
+        public AnswerOption(string optionId)
+        {
+            OptionId = optionId;
+        }
+
+
+        private string optionId;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -22,7 +29,7 @@ namespace QuizMaker_labb3.Extension
             set
             {
                 _answer = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Answer)));
+                RaisePropertyChanged(nameof(Answer));
             }
         }
 
@@ -33,11 +40,18 @@ namespace QuizMaker_labb3.Extension
             set
             {
                 _backGroundColor = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BackGroundColor)));
+                RaisePropertyChanged(nameof(BackGroundColor));
             }
         }
 
-        protected void OnPropertyChanged(string propertyName) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        public string OptionId { get => optionId;
+            set
+            {
+                optionId = value;
+                RaisePropertyChanged(nameof(OptionId));
+            }
+        }
+
+        
     }
 }

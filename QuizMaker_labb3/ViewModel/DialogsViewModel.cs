@@ -32,6 +32,7 @@ namespace QuizMaker_labb3.ViewModel
         public void QuizResultDialog(object? obj)
         {
             var quizResultDialog = new QuizResultDialogWindow();
+            quizResultDialog.ShowDialog();
         }
         
     }

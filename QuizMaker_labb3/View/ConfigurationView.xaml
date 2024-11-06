@@ -7,7 +7,7 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp" 
              xmlns:viewmodel="clr-namespace:QuizMaker_labb3.ViewModel" 
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="600" d:Background="White" Height="450" Width="600">
+             d:DesignHeight="450" d:DesignWidth="600" d:Background="White" Height="450" Width="600" Background="AliceBlue" >
 
     <Grid>
         <Grid.RowDefinitions>
@@ -52,7 +52,7 @@
                     Command="{Binding DataContext.UpdateViewCommand, 
                     RelativeSource={RelativeSource AncestorType=Window}}">
                 <StackPanel>
-                    <fa:IconImage Icon="Sliders"/>
+                    <fa:IconImage Icon="Play"/>
                 </StackPanel>
             </Button>
 
