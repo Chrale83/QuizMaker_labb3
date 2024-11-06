@@ -26,7 +26,7 @@ namespace QuizMaker_labb3.Extension
             }
         }
 
-        private SolidColorBrush _backGroundColor = new SolidColorBrush(Colors.Red);
+        private SolidColorBrush _backGroundColor = new SolidColorBrush(Colors.LightGray);
         public SolidColorBrush BackGroundColor
         {
             get => _backGroundColor;

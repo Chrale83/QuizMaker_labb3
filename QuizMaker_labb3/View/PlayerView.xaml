@@ -9,10 +9,10 @@
         <QuizMaker_labb3.Converter:AnswerButtonConverter x:Key="AnswerButtonConverter" />
 
         <QuizMaker_labb3.Converter:ColorToBrushConverter  x:Key="colorToSolidColorBrushConverter"/>
-        
+
     </UserControl.Resources>
 
-    
+
     <Grid d:Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -23,7 +23,7 @@
 
         <TextBlock Grid.Row="0" Margin="5" FontSize="30" HorizontalAlignment="Right" 
                    Text="{Binding PlayerViewModel.TimerForQuestionPack}" />
-        
+
         <TextBlock Grid.Row="1" Margin="10" FontSize="40" HorizontalAlignment="Center" 
                    Text="{Binding PlayerViewModel.CurrentQuery, 
                     Mode=TwoWay, 
@@ -48,48 +48,74 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
-            <Button Grid.Column="0" Grid.Row="0" 
-                    Margin="20,20,10,10" Width="250" Height="90" 
-                    HorizontalAlignment="Center" VerticalAlignment="Center"
-                    Content="{Binding PlayerViewModel.AnswerOption1}"
-                    Command="{Binding PlayerViewModel.CheckAnswerCommand}"
-                    CommandParameter="{Binding PlayerViewModel.AnswerOption1}"
-                    
-                    />
-            
-            <Button Grid.Column="1" Grid.Row="0" 
-                    Margin="10,20,20,10" Width="250" Height="90" 
-                    HorizontalAlignment="Center" VerticalAlignment="Center"
-                    Content="{Binding PlayerViewModel.AnswerOption2}"
-                    Command="{Binding PlayerViewModel.CheckAnswerCommand}"/>
 
-            <Button Grid.Column="0" Grid.Row="1" 
-                    Margin="20,10,10,20" Width="250" Height="90" 
-                    HorizontalAlignment="Center" VerticalAlignment="Center"
-                    Content="{Binding PlayerViewModel.AnswerOption3}"
-                    Command="{Binding PlayerViewModel.CheckAnswerCommand}" />
 
+
+            <Button  Name="Button1"
+                    Background="{Binding PlayerViewModel.AnswerOption3.BackGroundColor }"
+                    Grid.Column="0" Grid.Row="0" 
+                    Margin="10,10,20,20" Width="250" Height="90" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Content="{Binding PlayerViewModel.AnswerOption1.Answer}"
+                    Command="{Binding PlayerViewModel.CheckAnswerCommand}" >
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource AnswerButtonConverter}">
+                        <Binding Path="PlayerViewModel.AnswerOption1.Answer" />
+                        <Binding Path="Name" ElementName="Button1"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+
+
+            <Button  Name="Button2"
+                    Background="{Binding PlayerViewModel.AnswerOption2.BackGroundColor }"
+                    Grid.Column="1" Grid.Row="0" 
+                    Margin="10,10,20,20" Width="250" Height="90" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Content="{Binding PlayerViewModel.AnswerOption2.Answer}"
+                    Command="{Binding PlayerViewModel.CheckAnswerCommand}" >
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource AnswerButtonConverter}">
+                        <Binding Path="PlayerViewModel.AnswerOption2.Answer" />
+                        <Binding Path="Name" ElementName="Button2"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+
+            <Button  Name="Button3"
+                    Background="{Binding PlayerViewModel.AnswerOption3.BackGroundColor }"
+                    Grid.Column="0" Grid.Row="1" 
+                    Margin="10,10,20,20" Width="250" Height="90" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Content="{Binding PlayerViewModel.AnswerOption3.Answer}"
+                    Command="{Binding PlayerViewModel.CheckAnswerCommand}" >
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource AnswerButtonConverter}">
+                        <Binding Path="PlayerViewModel.AnswerOption3.Answer" />
+                        <Binding Path="Name" ElementName="Button3"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
 
             <Button  Name="Button4"
-                     Background="{Binding PlayerViewModel.TempAnswerOption1.BackGroundColor }"
+                     Background="{Binding PlayerViewModel.AnswerOption4.BackGroundColor }"
                      Grid.Column="1" Grid.Row="1" 
                      Margin="10,10,20,20" Width="250" Height="90" 
                      HorizontalAlignment="Center" VerticalAlignment="Center"
-                     Content="{Binding PlayerViewModel.TempAnswerOption1.Answer}"
-                     Command="{Binding PlayerViewModel.CheckAnswerCommand}" > 
-                    <Button.CommandParameter>
+                     Content="{Binding PlayerViewModel.AnswerOption4.Answer}"
+                     Command="{Binding PlayerViewModel.CheckAnswerCommand}" >
+                <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource AnswerButtonConverter}">
-                        <Binding Path="PlayerViewModel.TempAnswerOption1.Answer" />
+                        <Binding Path="PlayerViewModel.AnswerOption4.Answer" />
                         <Binding Path="Name" ElementName="Button4"/>
                     </MultiBinding>
                 </Button.CommandParameter>
-                </Button>
-                    
-                    
-                    
-            
-            
+            </Button>
+
+
+
+
+
         </Grid>
 
     </Grid>

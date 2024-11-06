@@ -36,7 +36,10 @@ namespace QuizMaker_labb3.ViewModel
             this.DialogsViewModel = new DialogsViewModel();
             this.Packs = new ObservableCollection<QuestionPackViewModel>();
             this.ActivePack = new QuestionPackViewModel(new QuestionPack("My first question pack")); //Denna ska inte ligga i konstruktorn, men kanske inte alls. (denna är hårdkodad)
-            
+
+            ActivePack.Questions.Add(new Question("Vad är sverige huvudstad", "Stockholm", "bb", "cc", "dd"));
+            ActivePack.Questions.Add(new Question("Vad är norges huvudstad", "Oslo", "bb", "cc", "dd"));
+            ActivePack.Questions.Add(new Question("finlands huvudstad", "helsinki", "bb", "cc", "dd"));
             SelectedViewModel = ConfigurationViewModel;
             Packs.Add(ActivePack);
             

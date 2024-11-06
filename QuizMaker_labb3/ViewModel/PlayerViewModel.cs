@@ -20,27 +20,59 @@ namespace QuizMaker_labb3.ViewModel
         private DispatcherTimer dispatcherTimer;
         private TimeSpan _timeLeft;
         private QuestionPackViewModel _playingPack;
-        private ObservableCollection<string> _playingQuestion = new();
+        private List<string> _playingQuestion = new();
         private List<Question> _activePlayingPack;
         private int _currentQuestionIndex;
         private int _timerForQuestionPack;
         private int _currentQuestionView;
         private int _maxQuestions;
         private string _currentQuery;
-        
-        private string _answerOption2;
-        private string _answerOption3;
-        private string _answerOption4;
+
+
         private string _currentCorrectAnswer;
         public AnswerButton _answerOption1;
 
-        public AnswerButton TempAnswerOption1
+        public AnswerButton AnswerOption1
         {
             get => _answerOption1;
             set
             {
                 _answerOption1 = value;
-                RaisePropertyChanged(nameof(TempAnswerOption1));
+                RaisePropertyChanged(nameof(AnswerOption1));
+            }
+        }
+
+        public AnswerButton _answerOption2;
+
+        public AnswerButton AnswerOption2
+        {
+            get => _answerOption2;
+            set
+            {
+                _answerOption2 = value;
+                RaisePropertyChanged(nameof(AnswerOption2));
+            }
+        }
+        public AnswerButton _answerOption3;
+
+        public AnswerButton AnswerOption3
+        {
+            get => _answerOption3;
+            set
+            {
+                _answerOption3 = value;
+                RaisePropertyChanged(nameof(AnswerOption3));
+            }
+        }
+        public AnswerButton _answerOption4;
+
+        public AnswerButton AnswerOption4
+        {
+            get => _answerOption4;
+            set
+            {
+                _answerOption4 = value;
+                RaisePropertyChanged(nameof(AnswerOption4));
             }
         }
 
@@ -53,68 +85,98 @@ namespace QuizMaker_labb3.ViewModel
             dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
             dispatcherTimer.Tick += DispatcherTimer_Tick;
             _answerOption1 = new AnswerButton();
+            _answerOption2 = new AnswerButton();
+            _answerOption3 = new AnswerButton();
+            _answerOption4 = new AnswerButton();
 
         }
 
 
 
-        private void AnswerButton(object returnValues)
+        private async void AnswerButton(object returnValues)
         {
-            if (returnValues is string[] Returns)
+            await CheckAnswerAndSet(returnValues as string[]);
+            
+            dispatcherTimer.Stop();
+
+            CurrentQuestionView++;
+            _currentQuestionIndex++;
+            if (_currentQuestionIndex < _maxQuestions)
             {
-                string answer = Returns[0];
-                string whatButton = Returns[1];
-
-                if (answer == _currentCorrectAnswer)
-                {
-                    switch (whatButton)
-                    {
-                        case "Button1":
-                            TempAnswerOption1.BackGroundColor = new SolidColorBrush(Colors.Green);
-                            break;
-                        case "Button2":
-                            TempAnswerOption1.BackGroundColor = new SolidColorBrush(Colors.Green);
-                            break;
-                        case "Button3":
-                            TempAnswerOption1.BackGroundColor = new SolidColorBrush(Colors.Green);
-                            break;
-                        case "Button4":
-                            TempAnswerOption1.BackGroundColor = new SolidColorBrush(Colors.Green);
-                            break;
-                    }
-                }
-
-
-
-
-                //answer = "test";
-
-                //    if (answer == _currentCorrectAnswer)
-                //    {
-                //        if (buttonNr == "Button4")
-                //        {
-                //            TempAnswerOption1.BackGroundColor = new SolidColorBrush(Colors.Green);
-
-                //        }
-                //    }
-                //    else
-                //    {
-                //        //FEL SVAR
-                //    }
-
-
-                dispatcherTimer.Stop();
-
-
-
-                CurrentQuestionView++;
-                _currentQuestionIndex++;
-                if (_currentQuestionIndex < _maxQuestions)
-                {
-                    PlayQuiz(_activePlayingPack[_currentQuestionIndex]);
-                }
+                PlayQuiz(_activePlayingPack[_currentQuestionIndex]);
+            }
+            else
+            {
+                mainWindowViewModel.SelectedViewModel = mainWindowViewModel.ConfigurationViewModel;
             }
         }
+
+        private async Task CheckAnswerAndSet(string[] values)
+        {
+            string answer = values[0];
+            string whatButton = values[1];
+
+            if (answer == _currentCorrectAnswer)
+            {
+                switch (whatButton)
+                {
+                    case "Button1":
+                        AnswerOption1.BackGroundColor = SetToGreen();
+                        await Task.Delay(2200);
+                        AnswerOption1.BackGroundColor = SetToDefault();
+                        break;
+                    case "Button2":
+                        AnswerOption2.BackGroundColor = SetToGreen();
+                        await Task.Delay(2200);
+                        AnswerOption2.BackGroundColor = SetToDefault();
+                        break;
+                    case "Button3":
+                        AnswerOption3.BackGroundColor = SetToGreen();
+                        await Task.Delay(2200);
+                        AnswerOption3.BackGroundColor = SetToDefault();
+                        break;
+                    case "Button4":
+                        AnswerOption4.BackGroundColor = SetToGreen();
+                        await Task.Delay(2200);
+                        AnswerOption4.BackGroundColor = SetToDefault();
+                        break;
+                }
+            }
+            else
+            {
+                switch (whatButton)
+                {
+                    case "Button1":
+                        AnswerOption1.BackGroundColor = SetToRed();
+                        await Task.Delay(2200);
+                        AnswerOption1.BackGroundColor = SetToDefault();
+                        break;
+                    case "Button2":
+                        AnswerOption2.BackGroundColor = SetToRed();
+                        await Task.Delay(2200);
+                        AnswerOption2.BackGroundColor = SetToDefault();
+                        break;
+                    case "Button3":
+                        AnswerOption3.BackGroundColor = SetToRed();
+                        await Task.Delay(2200);
+                        AnswerOption3.BackGroundColor = SetToDefault();
+                        break;
+                    case "Button4":
+                        AnswerOption4.BackGroundColor = SetToRed();
+                        await Task.Delay(2200);
+                        AnswerOption4.BackGroundColor = SetToDefault();
+                        break;
+                }
+
+
+            }
+            
+
+        }
+
+        public SolidColorBrush SetToGreen() => new SolidColorBrush(Colors.Green);
+        public SolidColorBrush SetToRed() => new SolidColorBrush(Colors.Red);
+        public SolidColorBrush SetToDefault() => new SolidColorBrush(Colors.LightGray);
 
         public DelegateCommand CheckAnswerCommand { get; }
 
@@ -136,43 +198,8 @@ namespace QuizMaker_labb3.ViewModel
                 RaisePropertyChanged(nameof(MaxQuestions));
             }
         }
-        public string AnswerOption1
-        {
-            get => _answerOption1;
-            set
-            {
-                _answerOption1 = value;
-                RaisePropertyChanged(nameof(AnswerOption1));
-            }
-        }
-        public string AnswerOption2
-        {
-            get => _answerOption2;
-            set
-            {
-                _answerOption2 = value;
-                RaisePropertyChanged(nameof(AnswerOption2));
-            }
-        }
-        public string AnswerOption3
-        {
-            get => _answerOption3;
-            set
-            {
-                _answerOption3 = value;
-                RaisePropertyChanged(nameof(AnswerOption3));
-            }
-        }
-        public string AnswerOption4
-        {
-            get => _answerOption4;
-            set
-            {
-                _answerOption4 = value;
-                RaisePropertyChanged(nameof(AnswerOption4));
-            }
-        }
-        public ObservableCollection<string> PlayingQuestion
+
+        public List<string> PlayingQuestion
         {
             get => _playingQuestion;
             set
@@ -220,18 +247,15 @@ namespace QuizMaker_labb3.ViewModel
             SetButtons();
 
 
-            _currentQuestionIndex++;
         }
 
         public void SetButtons()
         {
 
-
-            AnswerOption1 = PlayingQuestion[0];
-            AnswerOption2 = PlayingQuestion[1];
-            AnswerOption3 = PlayingQuestion[2];
-            //AnswerOption4 = PlayingQuestion[3];
-            TempAnswerOption1.Answer = PlayingQuestion[3];
+            AnswerOption1.Answer = PlayingQuestion[0].ToString();
+            AnswerOption2.Answer = PlayingQuestion[1].ToString();
+            AnswerOption3.Answer = PlayingQuestion[2].ToString();
+            AnswerOption4.Answer = PlayingQuestion[3].ToString();
         }
 
         private void SetupGame(QuestionPackViewModel activePack)
@@ -254,11 +278,9 @@ namespace QuizMaker_labb3.ViewModel
         }
         private void SetTimer(int TimerForQuestionPack)
         {
-            //_timeLeft är en inte??
+            //_timeLeft är en int??
             _timeLeft = TimeSpan.FromSeconds(TimerForQuestionPack); //<---
             dispatcherTimer.Start();
-
-
         }
 
         private void DispatcherTimer_Tick(object sender, EventArgs e)
@@ -284,8 +306,5 @@ namespace QuizMaker_labb3.ViewModel
                 list[n] = value;
             }
         }
-
     }
-
-
 }
