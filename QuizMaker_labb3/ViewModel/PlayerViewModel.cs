@@ -27,11 +27,11 @@ namespace QuizMaker_labb3.ViewModel
         private int _currentQuestionView;
         private int _maxQuestions;
         private string _currentQuery;
-
-
         private string _currentCorrectAnswer;
         public AnswerButton _answerOption1;
-
+        public AnswerButton _answerOption2;
+        public AnswerButton _answerOption3;
+        public AnswerButton _answerOption4;
         public AnswerButton AnswerOption1
         {
             get => _answerOption1;
@@ -41,9 +41,6 @@ namespace QuizMaker_labb3.ViewModel
                 RaisePropertyChanged(nameof(AnswerOption1));
             }
         }
-
-        public AnswerButton _answerOption2;
-
         public AnswerButton AnswerOption2
         {
             get => _answerOption2;
@@ -53,8 +50,6 @@ namespace QuizMaker_labb3.ViewModel
                 RaisePropertyChanged(nameof(AnswerOption2));
             }
         }
-        public AnswerButton _answerOption3;
-
         public AnswerButton AnswerOption3
         {
             get => _answerOption3;
@@ -64,8 +59,6 @@ namespace QuizMaker_labb3.ViewModel
                 RaisePropertyChanged(nameof(AnswerOption3));
             }
         }
-        public AnswerButton _answerOption4;
-
         public AnswerButton AnswerOption4
         {
             get => _answerOption4;
@@ -75,8 +68,6 @@ namespace QuizMaker_labb3.ViewModel
                 RaisePropertyChanged(nameof(AnswerOption4));
             }
         }
-
-
         public PlayerViewModel(MainWindowViewModel? mainWindowViewModel)
         {
             this.mainWindowViewModel = mainWindowViewModel;
@@ -88,10 +79,9 @@ namespace QuizMaker_labb3.ViewModel
             _answerOption2 = new AnswerButton();
             _answerOption3 = new AnswerButton();
             _answerOption4 = new AnswerButton();
+            
 
         }
-
-
 
         private async void AnswerButton(object returnValues)
         {
@@ -107,6 +97,7 @@ namespace QuizMaker_labb3.ViewModel
             }
             else
             {
+
                 mainWindowViewModel.SelectedViewModel = mainWindowViewModel.ConfigurationViewModel;
             }
         }
@@ -168,10 +159,7 @@ namespace QuizMaker_labb3.ViewModel
                         break;
                 }
 
-
             }
-            
-
         }
 
         public SolidColorBrush SetToGreen() => new SolidColorBrush(Colors.Green);
@@ -257,7 +245,6 @@ namespace QuizMaker_labb3.ViewModel
             AnswerOption3.Answer = PlayingQuestion[2].ToString();
             AnswerOption4.Answer = PlayingQuestion[3].ToString();
         }
-
         private void SetupGame(QuestionPackViewModel activePack)
         {
             _activePlayingPack = new List<Question>(activePack.Questions);
@@ -267,6 +254,7 @@ namespace QuizMaker_labb3.ViewModel
             CurrentQuestionView = 1;
             _currentQuestionIndex = 0;
         }
+
 
         private void SetupPlayingQuestions(Question playingQuestion)
         {
@@ -279,7 +267,7 @@ namespace QuizMaker_labb3.ViewModel
         private void SetTimer(int TimerForQuestionPack)
         {
             //_timeLeft är en int??
-            _timeLeft = TimeSpan.FromSeconds(TimerForQuestionPack); //<---
+            _timeLeft = TimeSpan.FromSeconds(TimerForQuestionPack);
             dispatcherTimer.Start();
         }
 

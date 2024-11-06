@@ -7,11 +7,13 @@ namespace QuizMaker_labb3.ViewModel
     {
         public DelegateCommand OpenNewPackDialog { get; }
         public DelegateCommand OpenEditDialogWindow { get; }
+        public DelegateCommand ShowQuizResults { get; }
 
         public DialogsViewModel()
         {
             OpenNewPackDialog = new DelegateCommand(NewPackDialog);
             OpenEditDialogWindow = new DelegateCommand(EditPackDialog);
+            ShowQuizResults = new DelegateCommand(QuizResultDialog);
         }
 
         private void EditPackDialog(object obj)
@@ -25,6 +27,11 @@ namespace QuizMaker_labb3.ViewModel
         {
             var createNewPackDialog = new CreateNewPackDialog();
             createNewPackDialog.ShowDialog();
+        }
+
+        public void QuizResultDialog(object? obj)
+        {
+            var quizResultDialog = new QuizResultDialogWindow();
         }
         
     }

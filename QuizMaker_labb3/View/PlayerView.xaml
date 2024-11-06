@@ -49,10 +49,8 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-
-
             <Button  Name="Button1"
-                    Background="{Binding PlayerViewModel.AnswerOption3.BackGroundColor }"
+                    Background="{Binding PlayerViewModel.AnswerOption1.BackGroundColor }"
                     Grid.Column="0" Grid.Row="0" 
                     Margin="10,10,20,20" Width="250" Height="90" 
                     HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -111,10 +109,6 @@
                     </MultiBinding>
                 </Button.CommandParameter>
             </Button>
-
-
-
-
 
         </Grid>
 
