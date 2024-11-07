@@ -32,6 +32,7 @@ namespace QuizMaker_labb3.ViewModel
         private ObservableCollection<QuestionPackViewModel> _packs;
         private ObservableCollection<QuestionPackViewModel> _newPack;
         private QuestionPackViewModel? _activePack;
+        public List<QuestionPackViewModel> tempPacks = new();
         private double _newPackTimeInSecondsLeft;
         private string _newPackName;
         private bool isFullScreen = false;
@@ -50,18 +51,16 @@ namespace QuizMaker_labb3.ViewModel
             this.PlayerViewModel = new PlayerViewModel(this); //ska stå this här Gör så dom har referenser till varandra
             this.DialogsViewModel = new DialogsViewModel();
             this.Packs = new ObservableCollection<QuestionPackViewModel>();
-            this.ActivePack = new QuestionPackViewModel(new QuestionPack("My first question pack")); //Denna ska inte ligga i konstruktorn, men kanske inte alls. (denna är hårdkodad)
+
             WindowState = new WindowState();
             WindowStyle = new WindowStyle();
             this.WindowStyle = WindowStyle.SingleBorderWindow;
 
 
 
-            ActivePack.Questions.Add(new Question("Vad är sverige huvudstad", "Stockholm", "bb", "cc", "dd"));
-            ActivePack.Questions.Add(new Question("Vad är norges huvudstad", "Oslo", "bb", "cc", "dd"));
-            ActivePack.Questions.Add(new Question("finlands huvudstad", "helsinki", "bb", "cc", "dd"));
+
             SelectedViewModel = ConfigurationViewModel;
-            Packs.Add(ActivePack);
+            //Packs.Add(ActivePack);
 
 
 
@@ -71,8 +70,10 @@ namespace QuizMaker_labb3.ViewModel
             CloseWindowCommand = new DelegateCommand(CloseDialogWindow);
             CreateNewPackCommand = new DelegateCommand(AddNewPack, CanAddNewPack);
             FullScreenToggleCommand = new DelegateCommand(FullScreenToggle);
-            //InitializeDataAsync();
-            LoadPacks();
+            SavePacksCommand = new DelegateCommand(SavePacksDataCommand);
+
+            LoadPacksData();
+            ActivePack = new();
         }
 
         private void FullScreenToggle(object obj)
@@ -92,63 +93,74 @@ namespace QuizMaker_labb3.ViewModel
             }
 
         }
-      
-        public void LoadPacks()
+        public void SavePacksDataCommand(object? arg)
         {
+            // Anropa den asynkrona metoden på ett korrekt sätt
+            _ = SavePacksData();
+            string debug = "debug";
+        }
+
+        public async Task SavePacksData()
+        {
+            tempPacks = Packs.ToList();
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string fullPathAndFile = Path.Combine(folderPath, "labb3config.json");
-
-            
-            if (!File.Exists(fullPathAndFile))
-            {
-                File.WriteAllText(fullPathAndFile, "[]");
-            }
-
-            
-            string json = File.ReadAllText(fullPathAndFile);
-
-           
+            string fullPathAndFile = Path.Combine(folderPath, "quizpackdata.json");
             var jsonOptions = new JsonSerializerOptions { IncludeFields = true };
-            var loadedPacks = JsonSerializer.Deserialize<IEnumerable<QuestionPack>>(json, jsonOptions) ;
+            var json = JsonSerializer.Serialize<List<QuestionPackViewModel>>(tempPacks, jsonOptions);
+            await File.WriteAllTextAsync(fullPathAndFile, json);
+        }
 
-           
 
-            foreach (var pack in loadedPacks)
+
+        public void LoadPacksData()
+        {
+            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string fullPathAndFile = Path.Combine(folderPath, "quizpackdata.json");
+
+            if (File.Exists(fullPathAndFile))
             {
-                Packs.Add(new QuestionPackViewModel(pack));
+                var jsonOptions = new JsonSerializerOptions
+                {
+                    IncludeFields = true,
+                    
+                };
+                string json = File.ReadAllText(fullPathAndFile);
+                tempPacks = JsonSerializer.Deserialize<List<QuestionPackViewModel>>(json, jsonOptions);
+                Packs = new ObservableCollection<QuestionPackViewModel>(tempPacks);
+                string debug = "debug";
+            }
+            else
+            {
+
+                Packs = new ObservableCollection<QuestionPackViewModel>();
             }
         }
 
 
-        public async Task SavePacks()
-        {
-            
-            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string fullPathAndFile = Path.Combine(folderPath, "labb3config.json");
-
-            
-            var packsToSave = Packs.Select(packViewModel => packViewModel._model).ToList();
-
-            
-            var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
-            string jsonData = JsonSerializer.Serialize(packsToSave, jsonOptions);
-
-            await File.WriteAllTextAsync(fullPathAndFile, jsonData);
-        }
 
 
 
-        private void ChangeToPlayerView(object? view) //-------------------
+
+
+
+
+        private void ChangeToPlayerView(object? view)
         {
             SelectedViewModel = PlayerViewModel;
             UpdateViewCommand.RaiseCanExectueChanged();
         }
 
-
         private bool CanChangeToPlayerView(object? arg)
         {
+            if (ActivePack?.Questions == null)
+            {
+                // Logga eller sätt en brytpunkt här
+                return false;
+            }
+
             return ActivePack.Questions.Any();
         }
+        public DelegateCommand SavePacksCommand { get; }
         public DelegateCommand CreateNewPackCommand { get; }
         public DelegateCommand CloseWindowCommand { get; }
         public DelegateCommand SelectPackCommand { get; }
@@ -199,18 +211,10 @@ namespace QuizMaker_labb3.ViewModel
             }
         }
 
-        public ObservableCollection<QuestionPackViewModel> NewPack
-        {
-            get => _newPack;
-            set
-            {
-                _newPack = value;
-                RaisePropertyChanged("NewPack");
-            }
-        }
+
         public QuestionPackViewModel? ActivePack
         {
-            get => _activePack;
+            get => _activePack ?? (_activePack = new QuestionPackViewModel());
             set
             {
                 _activePack = value;
@@ -260,57 +264,13 @@ namespace QuizMaker_labb3.ViewModel
             if (obj is QuestionPackViewModel selectedPack)
             {
                 Packs.Remove(selectedPack);
+                RaisePropertyChanged(nameof(selectedPack));
             }
         }
 
-        //public async Task<IEnumerable<QuestionPack>> LoadData()
-        //{
-        //    string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        //    string fullPathAndFile = Path.Combine(folderPath, "labb3config.json");
-        //    var jsonOption = new JsonSerializerOptions();
-        //    jsonOption.IncludeFields = true;
-        //    if (File.Exists(fullPathAndFile))
-        //    {
-        //        var loadedPack = await File.ReadAllTextAsync(fullPathAndFile);
-        //        IEnumerable<QuestionPack> loadedPacks = JsonSerializer.Deserialize<IEnumerable<QuestionPack>>(loadedPack, jsonOption);
-
-        //        return loadedPacks;
-        //    }
-
-        //    else
-        //    {
-        //        if (!File.Exists(pathToFile)) // Creates an file with an empty object if it doesnt exist.
-        //        {
-        //            //var emptyPacks = new ObservableCollection<QuestionPackViewModel>();
-        //            //string jsonString = JsonSerializer.Serialize("[]");
-        //            File.WriteAllText(pathToFile, "[]");
-        //        }
-        //        string tempBox = JsonSerializer.Serialize(Packs);
-        //        File.WriteAllText(fullPathAndFile, tempBox);
-        //        return null;
-        //    }
-        //}
 
 
-
-        //private async void InitializeDataAsync()
-        //{
-        //    var loadedPacks = await LoadData();
-        //    foreach (var pack in loadedPacks)
-        //    {
-        //        Packs.Add(new QuestionPackViewModel(pack));
-        //    }
-        //}
-
-
-
-
-
-        private bool CanRemoveSelectedPack(object? arg)
-        {
-            return !Packs.Any();
-        }
-        private void CloseDialogWindow(object? arg) // <------------- Fixa onödig If-sats? går att göra bättre (PRIO)
+        private void CloseDialogWindow(object? arg)
         {
             if (arg is CreateNewPackDialog dialogNew)
             {

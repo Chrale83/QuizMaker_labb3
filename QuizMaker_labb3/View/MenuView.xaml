@@ -48,8 +48,10 @@
 
                 </MenuItem>
                 <Separator />
-                <MenuItem Header="Import Questions" 
-                          Icon="{fa:Icon FileImport}" />
+                <MenuItem Header="Save" 
+                          Icon="{fa:Icon Save}"      
+                          Command="{Binding DataContext.SavePacksCommand, 
+                          RelativeSource={RelativeSource AncestorType=Window}}"/> />
                 <Separator />
                 <MenuItem Header="E_xit" />
 
@@ -59,7 +61,7 @@
 
                 <MenuItem Header="_Add Question" Icon="{fa:Icon Plus}" 
                           Command="{Binding ConfigurationViewModel.AddQuestionCommand}"/>
-                <MenuItem Header="_Remove QUestion" Icon="{fa:Icon Minus}"
+                <MenuItem Header="_Remove Question" Icon="{fa:Icon Minus}"
                           Command="{Binding ConfigurationViewModel.DeleteQuestionCommand}"/>
 
                 <MenuItem Header="_Pack options" 
