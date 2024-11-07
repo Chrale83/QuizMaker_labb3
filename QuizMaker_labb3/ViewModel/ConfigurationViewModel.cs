@@ -37,6 +37,9 @@ namespace QuizMaker_labb3.ViewModel
 
             _mainWindowViewModel?.UpdateViewCommand.RaiseCanExectueChanged();
             DeleteQuestionCommand.RaiseCanExectueChanged();
+            
+            
+
         }
         private void DeleteQuestion(object? obj)
         {

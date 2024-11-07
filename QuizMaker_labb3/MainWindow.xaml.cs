@@ -1,4 +1,5 @@
-﻿using QuizMaker_labb3.ViewModel;
+﻿using QuizMaker_labb3.Command;
+using QuizMaker_labb3.ViewModel;
 using System.Text;
 using System.Windows;
 
@@ -15,9 +16,13 @@ namespace QuizMaker_labb3
         {
             InitializeComponent();
             DataContext = new MainWindowViewModel(); //DataContex får hela det fönstret och dess properties
+            FullScreenCommand = new DelegateCommand(FullScreenSwap);
         }
-
-
+        public DelegateCommand FullScreenCommand { get; }
+        private void FullScreenSwap(object obj)
+        {
+            WindowState = WindowState.Maximized;
+        }
 
 
     }

@@ -1,7 +1,12 @@
 ﻿using QuizMaker_labb3.Command;
 using QuizMaker_labb3.Dialogs;
+using QuizMaker_labb3.Extension;
 using QuizMaker_labb3.Model;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Text.Json;
+using System.Windows;
+using static System.Windows.Forms.Design.AxImporter;
 
 namespace QuizMaker_labb3.ViewModel
 {
@@ -18,7 +23,7 @@ namespace QuizMaker_labb3.ViewModel
                 RaisePropertyChanged();
                 if (value == PlayerViewModel)
                 {
-                PlayerViewModel.StartQuiz(ActivePack);
+                    PlayerViewModel.StartQuiz(ActivePack);
 
                 }
             }
@@ -29,6 +34,16 @@ namespace QuizMaker_labb3.ViewModel
         private QuestionPackViewModel? _activePack;
         private double _newPackTimeInSecondsLeft;
         private string _newPackName;
+        private bool isFullScreen = false;
+        private WindowStyle _windowStyle;
+        public WindowStyle WindowStyle
+        {
+            get => _windowStyle; set
+            {
+                _windowStyle = value;
+                RaisePropertyChanged(nameof(WindowStyle));
+            }
+        }
         public MainWindowViewModel()
         {
             this.ConfigurationViewModel = new ConfigurationViewModel(this); // gör att dom har en referens tillbax
@@ -36,25 +51,100 @@ namespace QuizMaker_labb3.ViewModel
             this.DialogsViewModel = new DialogsViewModel();
             this.Packs = new ObservableCollection<QuestionPackViewModel>();
             this.ActivePack = new QuestionPackViewModel(new QuestionPack("My first question pack")); //Denna ska inte ligga i konstruktorn, men kanske inte alls. (denna är hårdkodad)
+            WindowState = new WindowState();
+            WindowStyle = new WindowStyle();
+            this.WindowStyle = WindowStyle.SingleBorderWindow;
+
+
 
             ActivePack.Questions.Add(new Question("Vad är sverige huvudstad", "Stockholm", "bb", "cc", "dd"));
             ActivePack.Questions.Add(new Question("Vad är norges huvudstad", "Oslo", "bb", "cc", "dd"));
             ActivePack.Questions.Add(new Question("finlands huvudstad", "helsinki", "bb", "cc", "dd"));
             SelectedViewModel = ConfigurationViewModel;
             Packs.Add(ActivePack);
-            
+
+
+
             UpdateViewCommand = new DelegateCommand(ChangeToPlayerView, CanChangeToPlayerView);
             DeleteSelectedPackCommand = new DelegateCommand(RemoveSelectedPack);
             SelectPackCommand = new DelegateCommand(SelectPack);
             CloseWindowCommand = new DelegateCommand(CloseDialogWindow);
             CreateNewPackCommand = new DelegateCommand(AddNewPack, CanAddNewPack);
-            
+            FullScreenToggleCommand = new DelegateCommand(FullScreenToggle);
+            //InitializeDataAsync();
+            LoadPacks();
         }
-        private void ChangeToPlayerView(object? view)
+
+        private void FullScreenToggle(object obj)
+        {
+            if (!isFullScreen)
+            {
+                StartWindowState = WindowState;
+                WindowState = WindowState.Maximized;
+                isFullScreen = true;
+                WindowStyle = WindowStyle.None;
+            }
+            else
+            {
+                WindowState = StartWindowState;
+                isFullScreen = false;
+                WindowStyle = WindowStyle.SingleBorderWindow;
+            }
+
+        }
+      
+        public void LoadPacks()
+        {
+            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string fullPathAndFile = Path.Combine(folderPath, "labb3config.json");
+
+            
+            if (!File.Exists(fullPathAndFile))
+            {
+                File.WriteAllText(fullPathAndFile, "[]");
+            }
+
+            
+            string json = File.ReadAllText(fullPathAndFile);
+
+           
+            var jsonOptions = new JsonSerializerOptions { IncludeFields = true };
+            var loadedPacks = JsonSerializer.Deserialize<IEnumerable<QuestionPack>>(json, jsonOptions) ;
+
+           
+
+            foreach (var pack in loadedPacks)
+            {
+                Packs.Add(new QuestionPackViewModel(pack));
+            }
+        }
+
+
+        public async Task SavePacks()
+        {
+            
+            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string fullPathAndFile = Path.Combine(folderPath, "labb3config.json");
+
+            
+            var packsToSave = Packs.Select(packViewModel => packViewModel._model).ToList();
+
+            
+            var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
+            string jsonData = JsonSerializer.Serialize(packsToSave, jsonOptions);
+
+            await File.WriteAllTextAsync(fullPathAndFile, jsonData);
+        }
+
+
+
+        private void ChangeToPlayerView(object? view) //-------------------
         {
             SelectedViewModel = PlayerViewModel;
             UpdateViewCommand.RaiseCanExectueChanged();
         }
+
+
         private bool CanChangeToPlayerView(object? arg)
         {
             return ActivePack.Questions.Any();
@@ -64,18 +154,23 @@ namespace QuizMaker_labb3.ViewModel
         public DelegateCommand SelectPackCommand { get; }
         public DelegateCommand DeleteSelectedPackCommand { get; }
         public DelegateCommand UpdateViewCommand { get; }
-        
+        public DelegateCommand FullScreenToggleCommand { get; }
+
         public Difficulty NewPackDifficulty { get; set; }
         public PlayerViewModel PlayerViewModel { get; }
         public ConfigurationViewModel ConfigurationViewModel { get; }
         public DialogsViewModel DialogsViewModel { get; }
-        
-        
+
+
         public double NewPackTimeInSecondsLeft
         {
             get => _newPackTimeInSecondsLeft;
-            set { _newPackTimeInSecondsLeft = value; RaisePropertyChanged(nameof(NewPackTimeInSecondsLeft)); }
-                    
+            set
+            {
+                _newPackTimeInSecondsLeft = value;
+                RaisePropertyChanged(nameof(NewPackTimeInSecondsLeft));
+            }
+
         }
         private void SelectPack(object obj)
         {
@@ -84,10 +179,12 @@ namespace QuizMaker_labb3.ViewModel
                 ActivePack = selectedPack;
             }
         }
-        public string NewPackName { get => _newPackName;
-            set 
-            { 
-                _newPackName = value; 
+        public string NewPackName
+        {
+            get => _newPackName;
+            set
+            {
+                _newPackName = value;
                 RaisePropertyChanged(nameof(NewPackName));
                 CreateNewPackCommand.RaiseCanExectueChanged();
             }
@@ -121,15 +218,36 @@ namespace QuizMaker_labb3.ViewModel
                 ConfigurationViewModel.RaisePropertyChanged("ActivePack");
             }
         }
-                
+        private WindowState _windowState;
+        private WindowState _startWindowState;
+        public WindowState StartWindowState
+        {
+            get => _startWindowState;
+            set
+            {
+                _windowState = value;
+                RaisePropertyChanged(nameof(StartWindowState));
+            }
+        }
+
+        public WindowState WindowState
+        {
+            get => _windowState;
+            set
+            {
+                _windowState = value;
+                RaisePropertyChanged(nameof(WindowState));
+            }
+        }
+
         private void AddNewPack(object? arg)
         {
             var NewPack = new QuestionPackViewModel(new QuestionPack(NewPackName, NewPackDifficulty, (int)NewPackTimeInSecondsLeft));
             Packs.Add(NewPack);
             ActivePack = NewPack;
             CleanUp();
-            
-            if (arg is CreateNewPackDialog dialog)  dialog.CloseDialog();
+
+            if (arg is CreateNewPackDialog dialog) dialog.CloseDialog();
         }
 
         private bool CanAddNewPack(object? arg)
@@ -144,6 +262,49 @@ namespace QuizMaker_labb3.ViewModel
                 Packs.Remove(selectedPack);
             }
         }
+
+        //public async Task<IEnumerable<QuestionPack>> LoadData()
+        //{
+        //    string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        //    string fullPathAndFile = Path.Combine(folderPath, "labb3config.json");
+        //    var jsonOption = new JsonSerializerOptions();
+        //    jsonOption.IncludeFields = true;
+        //    if (File.Exists(fullPathAndFile))
+        //    {
+        //        var loadedPack = await File.ReadAllTextAsync(fullPathAndFile);
+        //        IEnumerable<QuestionPack> loadedPacks = JsonSerializer.Deserialize<IEnumerable<QuestionPack>>(loadedPack, jsonOption);
+
+        //        return loadedPacks;
+        //    }
+
+        //    else
+        //    {
+        //        if (!File.Exists(pathToFile)) // Creates an file with an empty object if it doesnt exist.
+        //        {
+        //            //var emptyPacks = new ObservableCollection<QuestionPackViewModel>();
+        //            //string jsonString = JsonSerializer.Serialize("[]");
+        //            File.WriteAllText(pathToFile, "[]");
+        //        }
+        //        string tempBox = JsonSerializer.Serialize(Packs);
+        //        File.WriteAllText(fullPathAndFile, tempBox);
+        //        return null;
+        //    }
+        //}
+
+
+
+        //private async void InitializeDataAsync()
+        //{
+        //    var loadedPacks = await LoadData();
+        //    foreach (var pack in loadedPacks)
+        //    {
+        //        Packs.Add(new QuestionPackViewModel(pack));
+        //    }
+        //}
+
+
+
+
 
         private bool CanRemoveSelectedPack(object? arg)
         {
@@ -165,7 +326,6 @@ namespace QuizMaker_labb3.ViewModel
             NewPackName = string.Empty;
         }
     }
-}                
+}
 
 
-        

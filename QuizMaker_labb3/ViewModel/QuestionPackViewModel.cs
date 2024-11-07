@@ -5,13 +5,15 @@ namespace QuizMaker_labb3.ViewModel
 {
     public class QuestionPackViewModel : ViewModelBase
     {
-        private readonly QuestionPack _model;
+        public readonly QuestionPack _model;
 
         public QuestionPackViewModel(QuestionPack model)
         {
             _model = model;
             Questions = new ObservableCollection<Question>(model.Questions);
         }
+        public QuestionPackViewModel() { }
+
         public ObservableCollection<Question> Questions { get; }
         public Difficulty Difficulty
         {
