@@ -20,7 +20,7 @@ namespace QuizMaker_labb3.Extension
 
         private string optionId;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        //public event PropertyChangedEventHandler? PropertyChanged;
 
         private string _answer = string.Empty;
         public string Answer

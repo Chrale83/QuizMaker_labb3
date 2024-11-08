@@ -1,12 +1,10 @@
 ﻿using QuizMaker_labb3.Command;
 using QuizMaker_labb3.Dialogs;
-using QuizMaker_labb3.Extension;
 using QuizMaker_labb3.Model;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
 using System.Windows;
-using static System.Windows.Forms.Design.AxImporter;
 
 namespace QuizMaker_labb3.ViewModel
 {
@@ -37,6 +35,8 @@ namespace QuizMaker_labb3.ViewModel
         private string _newPackName;
         private bool isFullScreen = false;
         private WindowStyle _windowStyle;
+        private WindowState _windowState;
+        private WindowState _startWindowState;
         public WindowStyle WindowStyle
         {
             get => _windowStyle; set
@@ -51,17 +51,14 @@ namespace QuizMaker_labb3.ViewModel
             this.PlayerViewModel = new PlayerViewModel(this); //ska stå this här Gör så dom har referenser till varandra
             this.DialogsViewModel = new DialogsViewModel();
             this.Packs = new ObservableCollection<QuestionPackViewModel>();
+            //ActivePack = new QuestionPackViewModel(new QuestionPack("My Question Pack"));
 
-            WindowState = new WindowState();
-            WindowStyle = new WindowStyle();
+
+            WindowState = WindowState.Normal;
+            WindowStyle = WindowStyle.SingleBorderWindow;
             this.WindowStyle = WindowStyle.SingleBorderWindow;
 
-
-
-
             SelectedViewModel = ConfigurationViewModel;
-            //Packs.Add(ActivePack);
-
 
 
             UpdateViewCommand = new DelegateCommand(ChangeToPlayerView, CanChangeToPlayerView);
@@ -72,8 +69,8 @@ namespace QuizMaker_labb3.ViewModel
             FullScreenToggleCommand = new DelegateCommand(FullScreenToggle);
             SavePacksCommand = new DelegateCommand(SavePacksDataCommand);
 
-            LoadPacksData();
-            ActivePack = new();
+
+            LoadPackData2();
         }
 
         private void FullScreenToggle(object obj)
@@ -95,19 +92,53 @@ namespace QuizMaker_labb3.ViewModel
         }
         public void SavePacksDataCommand(object? arg)
         {
-            // Anropa den asynkrona metoden på ett korrekt sätt
+
             _ = SavePacksData();
             string debug = "debug";
         }
 
         public async Task SavePacksData()
         {
-            tempPacks = Packs.ToList();
+            var jsonOptions = new JsonSerializerOptions { IncludeFields = true }; //<--- används inte
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string fullPathAndFile = Path.Combine(folderPath, "quizpackdata.json");
-            var jsonOptions = new JsonSerializerOptions { IncludeFields = true };
-            var json = JsonSerializer.Serialize<List<QuestionPackViewModel>>(tempPacks, jsonOptions);
-            await File.WriteAllTextAsync(fullPathAndFile, json);
+            string fullPathAndFile = Path.Combine(folderPath, "labb3quiz.json");
+            //string inJson = JsonSerializer.Serialize(Packs);
+            var inJson = JsonSerializer.Serialize<ObservableCollection<QuestionPackViewModel>>(Packs);
+
+            await File.WriteAllTextAsync(fullPathAndFile, inJson);
+            string debugstop = "string";
+        }
+
+
+        public void LoadPackData2()
+        {
+            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string fullPathAndFile = Path.Combine(folderPath, "labb3quiz.json");
+            if (!File.Exists(fullPathAndFile))
+            {
+                //File.WriteAllText(fullPathAndFile);
+                ActivePack = new QuestionPackViewModel(new QuestionPack("Your First QuestionPack"));
+                Packs.Add(ActivePack);
+            }
+            else
+            {
+                string json = File.ReadAllText(fullPathAndFile);
+                var jsonstring = JsonSerializer.Deserialize<ObservableCollection<QuestionPack>>(json);
+                foreach (var item in jsonstring)
+                {
+                    var tempPack = new QuestionPackViewModel(item);
+                    Packs.Add(tempPack);
+                }
+            }
+
+            // Gör om varje questionpack till   Questionpackviewmodel
+
+            //Stoppa in i en observable collection av questionpackviewmodel
+
+            //Sätt Packs till ovan
+
+            ActivePack = Packs.FirstOrDefault();
+
         }
 
 
@@ -115,14 +146,14 @@ namespace QuizMaker_labb3.ViewModel
         public void LoadPacksData()
         {
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string fullPathAndFile = Path.Combine(folderPath, "quizpackdata.json");
+            string fullPathAndFile = Path.Combine(folderPath, "labb3quiz.json");
 
             if (File.Exists(fullPathAndFile))
             {
                 var jsonOptions = new JsonSerializerOptions
                 {
                     IncludeFields = true,
-                    
+
                 };
                 string json = File.ReadAllText(fullPathAndFile);
                 tempPacks = JsonSerializer.Deserialize<List<QuestionPackViewModel>>(json, jsonOptions);
@@ -154,7 +185,7 @@ namespace QuizMaker_labb3.ViewModel
         {
             if (ActivePack?.Questions == null)
             {
-                // Logga eller sätt en brytpunkt här
+
                 return false;
             }
 
@@ -214,7 +245,7 @@ namespace QuizMaker_labb3.ViewModel
 
         public QuestionPackViewModel? ActivePack
         {
-            get => _activePack ?? (_activePack = new QuestionPackViewModel());
+            get => _activePack;
             set
             {
                 _activePack = value;
@@ -222,8 +253,7 @@ namespace QuizMaker_labb3.ViewModel
                 ConfigurationViewModel.RaisePropertyChanged("ActivePack");
             }
         }
-        private WindowState _windowState;
-        private WindowState _startWindowState;
+
         public WindowState StartWindowState
         {
             get => _startWindowState;
@@ -249,7 +279,7 @@ namespace QuizMaker_labb3.ViewModel
             var NewPack = new QuestionPackViewModel(new QuestionPack(NewPackName, NewPackDifficulty, (int)NewPackTimeInSecondsLeft));
             Packs.Add(NewPack);
             ActivePack = NewPack;
-            CleanUp();
+            SetNewPackToEmpty();
 
             if (arg is CreateNewPackDialog dialog) dialog.CloseDialog();
         }
@@ -281,7 +311,7 @@ namespace QuizMaker_labb3.ViewModel
                 dialogEdit.CloseDialog();
             }
         }
-        private void CleanUp()
+        private void SetNewPackToEmpty()
         {
             NewPackName = string.Empty;
         }

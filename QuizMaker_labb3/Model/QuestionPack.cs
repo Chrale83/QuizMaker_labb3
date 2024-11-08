@@ -8,7 +8,7 @@ namespace QuizMaker_labb3.Model
 {
     public class QuestionPack
     {
-        public QuestionPack(string name, Difficulty difficulty = Difficulty.Medium, int timeLimitInSeconds = 75) //Default värden på de 2 sista argumenten
+        public QuestionPack(string name = "DefaultPackName", Difficulty difficulty = Difficulty.Medium, int timeLimitInSeconds = 75) //Default värden på de 2 sista argumenten
         {
             Name = name;
             Difficulty = difficulty;

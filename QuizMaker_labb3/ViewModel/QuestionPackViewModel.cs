@@ -1,5 +1,6 @@
 ﻿using QuizMaker_labb3.Model;
 using System.Collections.ObjectModel;
+using System.Text.Json.Serialization;
 
 namespace QuizMaker_labb3.ViewModel
 {
@@ -12,7 +13,12 @@ namespace QuizMaker_labb3.ViewModel
             _model = model;
             Questions = new ObservableCollection<Question>(model.Questions);
         }
-        public QuestionPackViewModel() { }
+        [JsonConstructor]
+        public QuestionPackViewModel() {
+            _model = new QuestionPack() { Questions = [] };
+            Questions = new ObservableCollection<Question>(_model.Questions);
+            
+        }
 
         public ObservableCollection<Question> Questions { get; }
         public Difficulty Difficulty
