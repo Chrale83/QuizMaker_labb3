@@ -13,7 +13,7 @@ namespace QuizMaker_labb3.ViewModel
         private DispatcherTimer dispatcherTimer;
         private TimeSpan timeLeft;
 
-        //private QuestionPackViewModel _playingPack;    <----------- Behöver jag denna?
+        
         private List<string> _playingQuestion;
         private List<Question> activePlayingPack;
         private int currentQuestionIndex;

@@ -37,30 +37,21 @@ namespace QuizMaker_labb3.ViewModel
         private WindowStyle _windowStyle;
         private WindowState _windowState;
         private WindowState _startWindowState;
-        public WindowStyle WindowStyle
-        {
-            get => _windowStyle; set
-            {
-                _windowStyle = value;
-                RaisePropertyChanged(nameof(WindowStyle));
-            }
-        }
+        
         public MainWindowViewModel()
         {
             this.ConfigurationViewModel = new ConfigurationViewModel(this); // gör att dom har en referens tillbax
             this.PlayerViewModel = new PlayerViewModel(this); //ska stå this här Gör så dom har referenser till varandra
             this.DialogsViewModel = new DialogsViewModel();
             this.Packs = new ObservableCollection<QuestionPackViewModel>();
-            //ActivePack = new QuestionPackViewModel(new QuestionPack("My Question Pack"));
-
-
+           
             WindowState = WindowState.Normal;
             WindowStyle = WindowStyle.SingleBorderWindow;
             this.WindowStyle = WindowStyle.SingleBorderWindow;
 
             SelectedViewModel = ConfigurationViewModel;
 
-
+            CloseApplicationCommand = new DelegateCommand(ShutDownApplication);
             UpdateViewCommand = new DelegateCommand(ChangeToPlayerView, CanChangeToPlayerView);
             DeleteSelectedPackCommand = new DelegateCommand(RemoveSelectedPack);
             SelectPackCommand = new DelegateCommand(SelectPack);
@@ -68,10 +59,22 @@ namespace QuizMaker_labb3.ViewModel
             CreateNewPackCommand = new DelegateCommand(AddNewPack, CanAddNewPack);
             FullScreenToggleCommand = new DelegateCommand(FullScreenToggle);
             SavePacksCommand = new DelegateCommand(SavePacksDataCommand);
-
-
-            LoadPackData2();
+            LoadPackData();
         }
+
+        public DelegateCommand CloseApplicationCommand { get; }
+        public DelegateCommand SavePacksCommand { get; }
+        public DelegateCommand CreateNewPackCommand { get; }
+        public DelegateCommand CloseWindowCommand { get; }
+        public DelegateCommand SelectPackCommand { get; }
+        public DelegateCommand DeleteSelectedPackCommand { get; }
+        public DelegateCommand UpdateViewCommand { get; }
+        public DelegateCommand FullScreenToggleCommand { get; }
+
+        public Difficulty NewPackDifficulty { get; set; }
+        public PlayerViewModel PlayerViewModel { get; }
+        public ConfigurationViewModel ConfigurationViewModel { get; }
+        public DialogsViewModel DialogsViewModel { get; }
 
         private void FullScreenToggle(object obj)
         {
@@ -90,27 +93,40 @@ namespace QuizMaker_labb3.ViewModel
             }
 
         }
-        public void SavePacksDataCommand(object? arg)
+        public async void SavePacksDataCommand(object? arg)
         {
 
-            _ = SavePacksData();
-            string debug = "debug";
+             await SavePacksData();
+            
+        }
+        public async void LoadPacksDataCommand(object? arg)
+        {
+
+            await LoadPackData();
+
         }
 
         public async Task SavePacksData()
         {
-            var jsonOptions = new JsonSerializerOptions { IncludeFields = true }; //<--- används inte
+            try
+            {
+
+            
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string fullPathAndFile = Path.Combine(folderPath, "labb3quiz.json");
-            //string inJson = JsonSerializer.Serialize(Packs);
+            
             var inJson = JsonSerializer.Serialize<ObservableCollection<QuestionPackViewModel>>(Packs);
 
             await File.WriteAllTextAsync(fullPathAndFile, inJson);
-            string debugstop = "string";
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine($"Ett fel hände vid sparandet av dina packs{error.Message}");
+            }
         }
 
 
-        public void LoadPackData2()
+        public async Task LoadPackData()
         {
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string fullPathAndFile = Path.Combine(folderPath, "labb3quiz.json");
@@ -130,50 +146,17 @@ namespace QuizMaker_labb3.ViewModel
                     Packs.Add(tempPack);
                 }
             }
-
             // Gör om varje questionpack till   Questionpackviewmodel
-
             //Stoppa in i en observable collection av questionpackviewmodel
-
             //Sätt Packs till ovan
-
-            ActivePack = Packs.FirstOrDefault();
-
+           ActivePack = Packs.FirstOrDefault();
         }
 
-
-
-        public void LoadPacksData()
+        public async void ShutDownApplication(object? arg)
         {
-            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string fullPathAndFile = Path.Combine(folderPath, "labb3quiz.json");
-
-            if (File.Exists(fullPathAndFile))
-            {
-                var jsonOptions = new JsonSerializerOptions
-                {
-                    IncludeFields = true,
-
-                };
-                string json = File.ReadAllText(fullPathAndFile);
-                tempPacks = JsonSerializer.Deserialize<List<QuestionPackViewModel>>(json, jsonOptions);
-                Packs = new ObservableCollection<QuestionPackViewModel>(tempPacks);
-                string debug = "debug";
-            }
-            else
-            {
-
-                Packs = new ObservableCollection<QuestionPackViewModel>();
-            }
+            await SavePacksData();
+            Application.Current.Shutdown();
         }
-
-
-
-
-
-
-
-
 
         private void ChangeToPlayerView(object? view)
         {
@@ -191,19 +174,6 @@ namespace QuizMaker_labb3.ViewModel
 
             return ActivePack.Questions.Any();
         }
-        public DelegateCommand SavePacksCommand { get; }
-        public DelegateCommand CreateNewPackCommand { get; }
-        public DelegateCommand CloseWindowCommand { get; }
-        public DelegateCommand SelectPackCommand { get; }
-        public DelegateCommand DeleteSelectedPackCommand { get; }
-        public DelegateCommand UpdateViewCommand { get; }
-        public DelegateCommand FullScreenToggleCommand { get; }
-
-        public Difficulty NewPackDifficulty { get; set; }
-        public PlayerViewModel PlayerViewModel { get; }
-        public ConfigurationViewModel ConfigurationViewModel { get; }
-        public DialogsViewModel DialogsViewModel { get; }
-
 
         public double NewPackTimeInSecondsLeft
         {
@@ -242,7 +212,6 @@ namespace QuizMaker_labb3.ViewModel
             }
         }
 
-
         public QuestionPackViewModel? ActivePack
         {
             get => _activePack;
@@ -251,26 +220,6 @@ namespace QuizMaker_labb3.ViewModel
                 _activePack = value;
                 RaisePropertyChanged(nameof(ActivePack));
                 ConfigurationViewModel.RaisePropertyChanged("ActivePack");
-            }
-        }
-
-        public WindowState StartWindowState
-        {
-            get => _startWindowState;
-            set
-            {
-                _windowState = value;
-                RaisePropertyChanged(nameof(StartWindowState));
-            }
-        }
-
-        public WindowState WindowState
-        {
-            get => _windowState;
-            set
-            {
-                _windowState = value;
-                RaisePropertyChanged(nameof(WindowState));
             }
         }
 
@@ -297,8 +246,32 @@ namespace QuizMaker_labb3.ViewModel
                 RaisePropertyChanged(nameof(selectedPack));
             }
         }
-
-
+        public WindowState StartWindowState
+        {
+            get => _startWindowState;
+            set
+            {
+                _windowState = value;
+                RaisePropertyChanged(nameof(StartWindowState));
+            }
+        }
+        public WindowState WindowState
+        {
+            get => _windowState;
+            set
+            {
+                _windowState = value;
+                RaisePropertyChanged(nameof(WindowState));
+            }
+        }
+        public WindowStyle WindowStyle
+        {
+            get => _windowStyle; set
+            {
+                _windowStyle = value;
+                RaisePropertyChanged(nameof(WindowStyle));
+            }
+        }
 
         private void CloseDialogWindow(object? arg)
         {
@@ -317,5 +290,3 @@ namespace QuizMaker_labb3.ViewModel
         }
     }
 }
-
-

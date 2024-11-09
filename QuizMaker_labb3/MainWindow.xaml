@@ -8,7 +8,7 @@
         WindowState="{Binding WindowState, Mode=TwoWay}"
         WindowStyle="{Binding WindowStyle, Mode=TwoWay}"
         xmlns:View="clr-namespace:QuizMaker_labb3.View" 
-        xmlns:QuizMaker_labb3.MainWindow.Converter="clr-namespace:QuizMaker_labb3.Converter"
+        
         mc:Ignorable="d"
         Title="Labb3" Height="450" Width="600" WindowStartupLocation="CenterScreen">
     <Window.Resources>
@@ -18,9 +18,30 @@
         <DataTemplate DataType="{x:Type ViewModel:PlayerViewModel}">
             <View:PlayerView />
         </DataTemplate>
-        
+
     </Window.Resources>
-        
+    <Window.InputBindings>
+        <KeyBinding Key="A" Modifiers="Ctrl" 
+                    Command="{Binding ConfigurationViewModel.AddQuestionCommand}" />
+        <KeyBinding Key="D" Modifiers="Ctrl" 
+                    Command="{Binding ConfigurationViewModel.DeleteQuestionCommand}" />
+        <KeyBinding Key="Enter" Modifiers="Alt" 
+            Command="{Binding FullScreenToggleCommand}" />
+        <KeyBinding Key="F4" Modifiers="Alt" 
+        Command="{Binding CloseApplicationCommand}" />
+        <KeyBinding Key="N" Modifiers="Ctrl" 
+        Command="{Binding CreateNewPackCommand}" />
+        <KeyBinding Key="S" Modifiers="Ctrl" 
+        Command="{Binding SavePacksCommand}" />
+
+        <KeyBinding Key="E" Modifiers="Ctrl" 
+        Command="{Binding DialogsViewModel.OpenEditDialogWindow}" />
+
+
+
+
+    </Window.InputBindings>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -32,11 +53,31 @@
         <ContentControl Grid.Row="1" Content="{Binding SelectedViewModel}" />
     </Grid>
 </Window>
-    
-    <!--Kvar att göra: -Fixa FullScreen
+
+<!--Kvar att göra: -Fixa FullScreen
                    -Snabb genvägar
                    -Json filen
-                   -Lägga in en bild på Zorro-->
+                   För godkänt
+
+
+
+
+
+Appen ska asynkront lagra och läsa in “frågepaket” i json.
+
+Man ska kunna lägga till, ta bort, och konfigurera frågepaket (namn, tid, svårighetsgrad).
+
+Frågor ska kunna läggas till / tas bort via tangentbord, menyalternativ och knappar i app.
+
+I spelläget ska alla frågor och svar i ett paket visas i slumpmässigt vald ordning.
+
+Förvald betänketid ska visas och räkna ner.
+
+Korrekt svar och spelaren svar ska visas, innan appen går vidare till nästa fråga.
+
+Efter alla frågor gått igenom visas ett resultat.
+
+Det ska finnas ett helskärmsläge.-->
         
 
         
