@@ -10,23 +10,7 @@ namespace QuizMaker_labb3.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
-
         private ViewModelBase _selectedViewModel;
-        public ViewModelBase SelectedViewModel
-        {
-            get { return _selectedViewModel; }
-            set
-            {
-                _selectedViewModel = value;
-                RaisePropertyChanged();
-                if (value == PlayerViewModel)
-                {
-                    PlayerViewModel.StartQuiz(ActivePack);
-
-                }
-            }
-        }
-
         private ObservableCollection<QuestionPackViewModel> _packs;
         private ObservableCollection<QuestionPackViewModel> _newPack;
         private QuestionPackViewModel? _activePack;
@@ -37,6 +21,20 @@ namespace QuizMaker_labb3.ViewModel
         private WindowStyle _windowStyle;
         private WindowState _windowState;
         private WindowState _startWindowState;
+        
+        public DelegateCommand SetToConfigurationViewCommand { get; }
+        public DelegateCommand CloseApplicationCommand { get; }
+        public DelegateCommand SavePacksCommand { get; }
+        public DelegateCommand CreateNewPackCommand { get; }
+        public DelegateCommand CloseWindowCommand { get; }
+        public DelegateCommand SelectPackCommand { get; }
+        public DelegateCommand DeleteSelectedPackCommand { get; }
+        public DelegateCommand UpdateViewCommand { get; }
+        public DelegateCommand FullScreenToggleCommand { get; }
+        public Difficulty NewPackDifficulty { get; set; }
+        public PlayerViewModel PlayerViewModel { get; }
+        public ConfigurationViewModel ConfigurationViewModel { get; }
+        public DialogsViewModel DialogsViewModel { get; }
         
         public MainWindowViewModel()
         {
@@ -59,22 +57,11 @@ namespace QuizMaker_labb3.ViewModel
             CreateNewPackCommand = new DelegateCommand(AddNewPack, CanAddNewPack);
             FullScreenToggleCommand = new DelegateCommand(FullScreenToggle);
             SavePacksCommand = new DelegateCommand(SavePacksDataCommand);
-            LoadPackData();
+            SetToConfigurationViewCommand = new DelegateCommand(ChangeToEditView);
+            LoadPacksDataAsync();
         }
 
-        public DelegateCommand CloseApplicationCommand { get; }
-        public DelegateCommand SavePacksCommand { get; }
-        public DelegateCommand CreateNewPackCommand { get; }
-        public DelegateCommand CloseWindowCommand { get; }
-        public DelegateCommand SelectPackCommand { get; }
-        public DelegateCommand DeleteSelectedPackCommand { get; }
-        public DelegateCommand UpdateViewCommand { get; }
-        public DelegateCommand FullScreenToggleCommand { get; }
-
-        public Difficulty NewPackDifficulty { get; set; }
-        public PlayerViewModel PlayerViewModel { get; }
-        public ConfigurationViewModel ConfigurationViewModel { get; }
-        public DialogsViewModel DialogsViewModel { get; }
+        
 
         private void FullScreenToggle(object obj)
         {
@@ -95,28 +82,21 @@ namespace QuizMaker_labb3.ViewModel
         }
         public async void SavePacksDataCommand(object? arg)
         {
-
              await SavePacksData();
-            
         }
-        public async void LoadPacksDataCommand(object? arg)
+        
+        public async void LoadPacksDataAsync()
         {
-
             await LoadPackData();
-
         }
 
         public async Task SavePacksData()
         {
             try
             {
-
-            
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string fullPathAndFile = Path.Combine(folderPath, "labb3quiz.json");
-            
+            string fullPathAndFile = Path.Combine(folderPath, "labb3quiz.json");    
             var inJson = JsonSerializer.Serialize<ObservableCollection<QuestionPackViewModel>>(Packs);
-
             await File.WriteAllTextAsync(fullPathAndFile, inJson);
             }
             catch (Exception error)
@@ -124,21 +104,19 @@ namespace QuizMaker_labb3.ViewModel
                 Console.WriteLine($"Ett fel hände vid sparandet av dina packs{error.Message}");
             }
         }
-
-
         public async Task LoadPackData()
         {
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string fullPathAndFile = Path.Combine(folderPath, "labb3quiz.json");
             if (!File.Exists(fullPathAndFile))
             {
-                //File.WriteAllText(fullPathAndFile);
+                
                 ActivePack = new QuestionPackViewModel(new QuestionPack("Your First QuestionPack"));
                 Packs.Add(ActivePack);
             }
             else
             {
-                string json = File.ReadAllText(fullPathAndFile);
+                string json = await File.ReadAllTextAsync(fullPathAndFile);
                 var jsonstring = JsonSerializer.Deserialize<ObservableCollection<QuestionPack>>(json);
                 foreach (var item in jsonstring)
                 {
@@ -158,22 +136,28 @@ namespace QuizMaker_labb3.ViewModel
             Application.Current.Shutdown();
         }
 
+        private void ChangeToEditView(object? view)
+        {
+            SelectedViewModel = ConfigurationViewModel;
+            
+            UpdateViewCommand.RaiseCanExectueChanged();
+            
+        }
+        
         private void ChangeToPlayerView(object? view)
         {
-            SelectedViewModel = PlayerViewModel;
+            SelectedViewModel = PlayerViewModel; 
             UpdateViewCommand.RaiseCanExectueChanged();
+            
         }
 
         private bool CanChangeToPlayerView(object? arg)
         {
-            if (ActivePack?.Questions == null)
-            {
-
-                return false;
-            }
-
+            if (ActivePack?.Questions == null) return false;
             return ActivePack.Questions.Any();
         }
+            
+
 
         public double NewPackTimeInSecondsLeft
         {
@@ -244,6 +228,20 @@ namespace QuizMaker_labb3.ViewModel
             {
                 Packs.Remove(selectedPack);
                 RaisePropertyChanged(nameof(selectedPack));
+            }
+        }
+        public ViewModelBase SelectedViewModel
+        {
+            get { return _selectedViewModel; }
+            set
+            {
+                _selectedViewModel = value;
+                RaisePropertyChanged();
+                if (value == PlayerViewModel)
+                {
+                    PlayerViewModel.StartQuiz(ActivePack);
+                    RaisePropertyChanged(nameof(SetToConfigurationViewCommand));
+                }
             }
         }
         public WindowState StartWindowState

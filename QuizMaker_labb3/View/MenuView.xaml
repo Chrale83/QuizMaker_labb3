@@ -87,6 +87,10 @@
                 <MenuItem Header="Play" Icon="{fa:Icon Play}" 
                           Command="{Binding DataContext.UpdateViewCommand, 
                             RelativeSource={RelativeSource AncestorType=Window}}"/>
+                
+                <MenuItem Header="Edit view" Icon="{fa:Icon Wrench}" 
+          Command="{Binding DataContext.SetToConfigurationViewCommand, 
+            RelativeSource={RelativeSource AncestorType=Window}}"/>
 
                 <Separator/>
                 

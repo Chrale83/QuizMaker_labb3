@@ -45,43 +45,15 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <View:MenuView />
+        <View:MenuView HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
-        <ContentControl Grid.Row="1" Content="{Binding SelectedViewModel}" />
+        <ContentControl Grid.Row="1" Content="{Binding SelectedViewModel}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
     </Grid>
 </Window>
 
-<!--Kvar att göra: -Fixa FullScreen
-                   -Snabb genvägar
-                   -Json filen
-                   För godkänt
 
 
-
-
-
-Appen ska asynkront lagra och läsa in “frågepaket” i json.
-
-Man ska kunna lägga till, ta bort, och konfigurera frågepaket (namn, tid, svårighetsgrad).
-
-Frågor ska kunna läggas till / tas bort via tangentbord, menyalternativ och knappar i app.
-
-I spelläget ska alla frågor och svar i ett paket visas i slumpmässigt vald ordning.
-
-Förvald betänketid ska visas och räkna ner.
-
-Korrekt svar och spelaren svar ska visas, innan appen går vidare till nästa fråga.
-
-Efter alla frågor gått igenom visas ett resultat.
-
-Det ska finnas ett helskärmsläge.-->
-        
-
-        
-            
-
-        
-    
+<!--Man ska kunna lägga till, ta bort, och konfigurera frågepaket-->

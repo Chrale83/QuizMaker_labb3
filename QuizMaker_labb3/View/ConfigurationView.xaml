@@ -7,9 +7,9 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp" 
              xmlns:viewmodel="clr-namespace:QuizMaker_labb3.ViewModel" 
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="600" d:Background="White" Height="450" Width="600" Background="AliceBlue" >
-
-    <Grid>
+             d:DesignHeight="450" d:DesignWidth="600" d:Background="White"  Background="AliceBlue" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+    
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="32" />
             <RowDefinition Height="*" />
@@ -17,7 +17,7 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="270"/>
-            <ColumnDefinition Width="330"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!--Vänstra sidan-->
@@ -68,7 +68,8 @@
 
         <ListView Margin="5,2,5,10" Grid.Row="1" Grid.Column="0" 
                   ItemsSource="{Binding ConfigurationViewModel.ActivePack.Questions}" 
-                  SelectedItem="{Binding ConfigurationViewModel.ActiveQuestion, Mode=TwoWay}">
+                  SelectedItem="{Binding ConfigurationViewModel.ActiveQuestion, Mode=TwoWay}"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>

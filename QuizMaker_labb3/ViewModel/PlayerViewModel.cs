@@ -236,7 +236,6 @@ namespace QuizMaker_labb3.ViewModel
        
         public void SetButtons()
         {
-
             AnswerOption1.Answer = PlayingQuestion[0].ToString();
             AnswerOption2.Answer = PlayingQuestion[1].ToString();
             AnswerOption3.Answer = PlayingQuestion[2].ToString();
